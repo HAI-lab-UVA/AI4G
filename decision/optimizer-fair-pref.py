@@ -7,6 +7,7 @@ Angel, Katherine, Matthew, Shashank, Zach, and Zhiming
 #For this package need to install C++14,cvxpy, and cvxopt
 import cvxpy as cp
 import numpy as np
+import pandas as pd
 #from decision.reward import *
 
 num_iter = 10
@@ -20,6 +21,15 @@ previous_allocation_rewards = []
 allocation_history = []
 #allocation time step
 allocationNumber = 0
+
+allD = pd.read_csv("../learning/results/Predicted Demand.csv")
+allD = allD.iloc[:, 1:allD.shape[1] - 1]
+
+allGamma = pd.read_csv("../learning/results/Predicted Supply.csv")
+allGamma = allGamma.iloc[:, 1:allGamma.shape[1]]
+
+x, y = allD.shape
+
 
 def gammaFunction(previous_allocation_rewards, allocationNumber):
     """
@@ -44,8 +54,6 @@ def gammaFunction(previous_allocation_rewards, allocationNumber):
         gammaArray = np.array(gamma)
         return gammaArray.reshape(len(gammaArray),1), allocationNumber
 
-
-
 def compute_grade_threshold(D,Gamma):
     '''
     The threshold values are computed by item for a given instance of the
@@ -65,7 +73,10 @@ def compute_grade_threshold(D,Gamma):
 
     return threshold2
 
-for iter in range(0,num_iter,1):
+for i in range(0, y, 19):
+    D = allD.iloc[:7, i:i + 19].to_numpy()
+    Gamma = allGamma.iloc[:, i:i + 19].to_numpy().sum(axis=0)
+
     past_tau = np.array(previous_allocation_rewards)
     # #demand
     # D = np.random.randint(1, 5, size=5).reshape(5, 1)
@@ -74,24 +85,20 @@ for iter in range(0,num_iter,1):
     # #supply
     # Gamma = np.random.randint(1,7, size=I)
 
-    #Overleaf sample scenario
-    # demand
-    D = np.array([[1, 1, 0, 1, 1],[1,0,0,1,1]]).T
-        #.reshape(5, 2)
-
+    # #Overleaf sample scenario
+    # # demand
+    # D = np.array([[1, 1, 0, 1, 1],[1,0,0,1,1]]).T
+    #     #.reshape(5, 2)
+    #
     D2 = D.copy()
     D2 = np.where(D2 ==0, 100000,D)
 
     # number of users and items
     U, I = D.shape
-    # supply
-    Gamma = np.array([3,4])
 
     # score
     psi2 = np.array(compute_grade_threshold(D, Gamma))
-    #psi2 = np.array(([psi[0],psi[0],psi[0],psi[0],psi[0]],
-                     #[psi[1],psi[1],psi[1],psi[1],psi[1]])).T
-    #psi = psi.reshape(2,1)
+
     # preference matrix randomly generated
     preference = np.random.rand(U, I).T
 
@@ -115,10 +122,10 @@ for iter in range(0,num_iter,1):
     constraints.append(cp.sum(allocation, axis=0) <= Gamma)
     constraints.append(allocation <= D)
     constraints.append(alpha <= xi)
-    constraints.append(allocation >=0)
+    constraints.append(allocation >= 0)
 
     # Objective function
-    objective = cp.Maximize(w_fair * alpha + w_preference * 1/(U*I)* cp.sum(allocation @ preference))
+    objective = cp.Maximize(w_fair * alpha + w_preference * 1 / (U * I) * cp.sum(allocation @ preference))
 
     # Problem
     prob = cp.Problem(objective, constraints)
@@ -130,8 +137,8 @@ for iter in range(0,num_iter,1):
 
     idZero = np.where(D == 0)
 
-    x,y = idZero
-    for i in range(0,len(x)):
+    x, y = idZero
+    for i in range(0, len(x)):
         tauValue[x[i]] += psi2[0][y[i]]
 
     if len(previous_allocation_rewards) < 4:
@@ -139,7 +146,7 @@ for iter in range(0,num_iter,1):
     else:
         previous_allocation_rewards.pop(0)
         previous_allocation_rewards.append(tauValue)
-    gamma,allocationNumber = gammaFunction(previous_allocation_rewards,allocationNumber)
+    gamma, allocationNumber = gammaFunction(previous_allocation_rewards, allocationNumber)
 
     past_tau = np.array(previous_allocation_rewards)
     allocation_history.append(allocation.value)
@@ -164,6 +171,7 @@ for iter in range(0,num_iter,1):
     print("")
     print("Allocation History")
     print(allocation_history)
+
 
 
 
