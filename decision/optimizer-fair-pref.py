@@ -6,7 +6,8 @@ Angel, Katherine, Matthew, Shashank, Zach, and Zhiming
 
 #For this package need to install C++14,cvxpy, and cvxopt
 import cvxpy as cp
-from decision.reward import *
+import numpy as np
+#from decision.reward import *
 
 num_iter = 10
 
@@ -43,6 +44,27 @@ def gammaFunction(previous_allocation_rewards, allocationNumber):
         gammaArray = np.array(gamma)
         return gammaArray.reshape(len(gammaArray),1), allocationNumber
 
+
+
+def compute_grade_threshold(D,Gamma):
+    '''
+    The threshold values are computed by item for a given instance of the
+    D and Gamma matrices
+    :param D: Estimated demand matrix
+    :param Gamma: Estimated supply matrix
+    :return: threshold (psi)
+    '''
+    total_demand = D.sum(axis=0)
+    threshold = Gamma / total_demand
+    threshold[threshold >= 1] = 1
+    # number of users and items
+    U, I = D.shape
+
+    #create a new array of U by I to work with cvxpy
+    threshold2 = np.tile(threshold,(U,1))
+
+    return threshold2
+
 for iter in range(0,num_iter,1):
     past_tau = np.array(previous_allocation_rewards)
     # #demand
@@ -66,9 +88,9 @@ for iter in range(0,num_iter,1):
     Gamma = np.array([3,4])
 
     # score
-    psi = np.array(compute_grade_threshold(D, Gamma))
-    psi2 = np.array(([psi[0],psi[0],psi[0],psi[0],psi[0]],
-                     [psi[1],psi[1],psi[1],psi[1],psi[1]])).T
+    psi2 = np.array(compute_grade_threshold(D, Gamma))
+    #psi2 = np.array(([psi[0],psi[0],psi[0],psi[0],psi[0]],
+                     #[psi[1],psi[1],psi[1],psi[1],psi[1]])).T
     #psi = psi.reshape(2,1)
     # preference matrix randomly generated
     preference = np.random.rand(U, I).T
@@ -110,8 +132,7 @@ for iter in range(0,num_iter,1):
 
     x,y = idZero
     for i in range(0,len(x)):
-        tauValue[x[i]] += psi[y[i]]
-
+        tauValue[x[i]] += psi2[0][y[i]]
 
     if len(previous_allocation_rewards) < 4:
         previous_allocation_rewards.append(tauValue)
