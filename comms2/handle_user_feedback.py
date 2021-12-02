@@ -12,6 +12,13 @@ elif len(os.listdir(RESPONSES_PATH)) == 0:
 else:
     for file in os.listdir(RESPONSES_PATH):
         os.rename(os.path.join(RESPONSES_PATH, file), os.path.join(RESPONSES_PATH, "Feedback.csv"))
+
+OUTPUT_PATH = os.path.join(os.getcwd(), 'OUTPUT')
+if not os.path.isdir(OUTPUT_PATH):
+    os.mkdir(OUTPUT_PATH)
+else:
+    for file in os.listdir(OUTPUT_PATH):
+        os.remove(os.path.join(OUTPUT_PATH, file))
     
 # converts responses csv into two dataframes (item pref feedback & allocation pref feedback)
 def obtain_feedback_matrices():
@@ -55,3 +62,6 @@ if __name__ == '__main__':
     print(alloc_feedback, "\n")
     print("Item Preference Feedback Dataframe: ")
     print(pref_feedback)
+
+    alloc_feedback.to_csv(os.path.join(OUTPUT_PATH, 'allocation_feedback.csv'))
+    pref_feedback.to_csv(os.path.join(OUTPUT_PATH, 'pref_feedback.csv'))
