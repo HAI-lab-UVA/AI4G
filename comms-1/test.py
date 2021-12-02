@@ -38,7 +38,7 @@ accuracy.rmse(predictions, verbose=True)
 
 # After Training
 algo.fit(n_epochs = 5)
-RHat2 = algo.construct_RHat(OVERRIDE = OVERRIDE)
+RHat2 = algo.construct_RHat(write_out = True, OVERRIDE = OVERRIDE)
 print(RHat2)
 predictions = algo.test(algo.trainset.build_testset())
 accuracy.rmse(predictions, verbose=True)

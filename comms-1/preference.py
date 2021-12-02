@@ -228,7 +228,7 @@ class SVDpp_neighborhood(AlgoBase):
 
             return self.item_sim
 
-    def construct_RHat(self, df = True, OVERRIDE = -10000):
+    def construct_RHat(self, df = True, write_out = False, OVERRIDE = -10000):
         # breakpoint()
         pref = self.pref.loc[:, self.pref.columns != 'user_id']
         pref = pref.replace(0,OVERRIDE)
@@ -252,8 +252,12 @@ class SVDpp_neighborhood(AlgoBase):
                     RHat[u][i] = pref[u][i]
 
         if df:
-            return pd.DataFrame(data = RHat, columns = ["oranges", "apples", "watermelon", "bananas", "eggplant", "tomatoes", "potatoes", "bread", "oats",
+            df = pd.DataFrame(data = RHat, columns = ["oranges", "apples", "watermelon", "bananas", "eggplant", "tomatoes", "potatoes", "bread", "oats",
                                                         "rice", "fish", "eggs", "chicken", "olive_oil", "soybean", "beef", "milk", "yogurt", "cheese_ball"])
+            if write_out:
+                df.to_csv("data\\user_preferences.csv")
+
+            return df
 
         return RHat
 
