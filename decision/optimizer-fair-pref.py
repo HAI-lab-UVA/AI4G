@@ -18,11 +18,13 @@ w_fair = 10
 w_preference = 1
 #store allocation reward history
 previous_allocation_rewards = []
+df_allocation_history = pd.DataFrame()
 allocation_history = []
 #allocation time step
 allocationNumber = 0
 
 allD = pd.read_csv("../learning/results/Predicted Demand.csv")
+userID = allD.iloc[:, 0].to_numpy()
 allD = allD.iloc[:, 1:allD.shape[1] - 1]
 
 allGamma = pd.read_csv("../learning/results/Predicted Supply.csv")
@@ -74,7 +76,8 @@ def compute_grade_threshold(D,Gamma):
     return threshold2
 
 for i in range(0, y, 19):
-    D = allD.iloc[:7, i:i + 19].to_numpy()
+    D = allD.iloc[:, i:i + 19].to_numpy()
+    userID = userID[:]
     Gamma = allGamma.iloc[:, i:i + 19].to_numpy().sum(axis=0)
 
     past_tau = np.array(previous_allocation_rewards)
@@ -149,7 +152,25 @@ for i in range(0, y, 19):
     gamma, allocationNumber = gammaFunction(previous_allocation_rewards, allocationNumber)
 
     past_tau = np.array(previous_allocation_rewards)
-    allocation_history.append(allocation.value)
+
+    df_id = pd.DataFrame(userID,columns=["ID"])
+    df_allocation = pd.DataFrame(allocation.value)
+
+    df_id_allocation = pd.concat([df_id,df_allocation],axis=1)
+
+    df_id_allocation["AllocationTime"] = allocationNumber
+
+    df_allocation_history= df_allocation_history.append(df_id_allocation)
+
+    #allocation_history.append(df_id_allocation.to_numpy())
+
+    allocation_np = np.array(allocation_history)
+
+    df_id_allocation.to_csv("./Data/allocation_day {}.csv".format(allocationNumber),sep=",",index=False)
+
+
+
+    #allocation_history_csv = np.savetxt("./Data/allocation_history.csv", allocation_np[0], delimiter=",", fmt='%12.8f')
 
     print("Allocation {}".format(allocationNumber))
     print("Demand")
@@ -172,6 +193,8 @@ for i in range(0, y, 19):
     print("Allocation History")
     print(allocation_history)
 
+
+df_allocation_history.to_csv("./Data/allocation_history.csv".format(allocationNumber),sep=",",index=False)
 
 
 
