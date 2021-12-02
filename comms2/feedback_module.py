@@ -1,13 +1,11 @@
 # import libraries
-import math
+import argparse
 import numpy
 import pandas as pd
 
 from surprise import SVD, SVDpp
-from surprise import NormalPredictor
 from surprise import Dataset
 from surprise import Reader
-from surprise.model_selection import cross_validate
 
 
 # name definitions
@@ -174,55 +172,46 @@ class Feedback:
         return prediction_df
 
 def main():
-    print ("feedback_module")
 
-    # inputs to feedback process
+    parser = argparse.ArgumentParser(description='Feedback module')
+    parser.add_argument('-d', '--decision', help='Decision Matrix data in csv form')
+    parser.add_argument('-f', '--feedback', help='Feedback survey data in csv form')
+    parser.add_argument('-a', '--alloc', help='Allocation Feedback data in csv form')
+    parser.add_argument('-i', '--item', help='Item Feedback data in csv form')
+    parser.add_argument('-u', '--usersim', help='User similarity data in csv form')
+    parser.add_argument('-s', '--itemsim', help='Item similarity data in csv form')
+    parser.add_argument('-o', '--outfile', default="predicted_feedback",  help='output csv filename')
 
-    # action "matrix"
-    actiondf = pd.DataFrame(
-        {'itemID': [0, 2, 0, 2],
-        'userID': [0, 0, 1, 1],
-        'quantity': [3, 3, 3, 3]}
-    )
-    print (actiondf)
+    args = parser.parse_args()
+    if not args.decision:
+        print ("Decision data was not specified")
+        exit()
+    if (not args.feedback) and not (args.alloc and args.item):
+        print ("Feedback data was not specified")
+        exit()
+    if (not args.usersim):
+        print ("User similarity data was not specified")
+    if (not args.itemsim):
+        print ("Item similarity data was not specified")
 
-    # feedback "matrix"
-    feedbackdf = pd.DataFrame(
-        {'itemID': [0, 2, 0, 2],
-        'userID': [0, 0, 1, 1],
-        'rating': [3, 3, 3, 3]}
-    )
-    print (feedbackdf)
+    decision_df = pd.read_csv(args.decision)
 
-    # user similarity "matrix"
-    user_similarity = [
-    [1, 0.25, 0.5],
-    [0.25, 1, 1],
-    [0.5, 1, 1],
-    ]
+    alloc_feedback_df = None
+    item_feedback_df = None
+    if args.feedback:
+        pass
+    elif args.alloc and args.item:
+        alloc_feedback_df = pd.read_csv(args.alloc)
+        item_feedback_df = pd.read_csv(args.item)
 
+    usersim_df = pd.read_csv(args.usersim)
 
     f = Feedback()
 
-    # combine decision and feedback matrices
-    decision = pd.DataFrame(
-        {'userID': [0, 0, 1, 1, 2, 2],
-        'itemID': [0, 1, 0, 1, 0, 1],
-        'quantity': [6, 10, 4, 8, 4, 6]}
-    )
+    feedback_prediction_df = f.predict_feedback(decision_df, item_feedback_df, alloc_feedback_df, usersim_df)
 
-    feedback = pd.DataFrame(
-        {'userID': [0, 1],
-        'itemID': [0, 0],
-        'rating': [3, 2]}
-    )
+    feedback_prediction_df.to_csv("{}.csv".format(args.outfile), index=False)
 
-    print (decision)
-    print (feedback)
-
-    x = f.predict_feedback(actiondf, [], feedbackdf, user_similarity)
-
-    print (x)
 
 if __name__ == "__main__":
     main()
