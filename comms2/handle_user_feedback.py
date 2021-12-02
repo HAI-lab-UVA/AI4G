@@ -20,7 +20,7 @@ def obtain_feedback_matrices():
     feedback = pd.read_csv(csv_path)
     feedback = feedback.drop(columns=['Timestamp'])
 
-    # rename columns in feedback df
+    # rename columns in feedback df and set user ID as the index
     columns = ['User ID']
     for col in feedback.columns:
         if not 'Please' in col:
@@ -29,15 +29,22 @@ def obtain_feedback_matrices():
             else:
                 columns.append('pref_' + col[:-2])
     feedback.columns = columns
+    feedback = feedback.set_index('User ID')
+    
+    # list of all user IDs
+    user_ids = ['Gal Gadot','Anonymous Narwhal','csk6snj','blacklodge','nm2fs','ae3xd','znp3ev','zqz8ae','ak3gj','pex7ps']
 
-    # list of all user IDs (currently based on user in feedback csv)
-    user_ids = feedback['User ID']
+    data = []
+    for uid in user_ids:
+        if uid in feedback.index:
+            data.append(feedback.loc[uid].tolist())
+        else:
+            data.append([])
+    feedback = pd.DataFrame(data, columns=columns[1:], index=user_ids).fillna(0)
 
     # create allocation and item preference dfs
-    alloc_feedback = pd.DataFrame(user_ids)
-    alloc_feedback = alloc_feedback.join(feedback[columns[1:20]]).fillna(0)
-    pref_feedback = pd.DataFrame(user_ids)
-    pref_feedback = pref_feedback.join(feedback[columns[20:]]).fillna(0)
+    alloc_feedback = feedback[columns[1:20]]
+    pref_feedback = feedback[columns[20:]]
 
     return alloc_feedback, pref_feedback
 
