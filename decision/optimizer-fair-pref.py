@@ -27,6 +27,12 @@ allD = pd.read_csv("../learning/results/Predicted Demand.csv")
 userID = allD.iloc[:, 0].to_numpy()
 allD = allD.iloc[:, 1:allD.shape[1] - 1]
 
+df_products = allD.iloc[:,0:19]
+
+productsNames = list(df_products.columns)
+
+productsNames = [i[:-1] for i in productsNames]
+
 allGamma = pd.read_csv("../learning/results/Predicted Supply.csv")
 allGamma = allGamma.iloc[:, 1:allGamma.shape[1]]
 
@@ -144,7 +150,7 @@ for i in range(0, y, 19):
     past_tau = np.array(previous_allocation_rewards)
 
     df_id = pd.DataFrame(userID,columns=["ID"])
-    df_allocation = pd.DataFrame(allocation.value)
+    df_allocation = pd.DataFrame(allocation.value,columns = productsNames)
 
     df_id_allocation = pd.concat([df_id,df_allocation],axis=1)
 
@@ -180,8 +186,6 @@ for i in range(0, y, 19):
     print("Gamma")
     print(gamma)
     print("")
-    print("Allocation History")
-    print(allocation_history)
 
 
 df_allocation_history.to_csv("./Data/allocation_history.csv".format(allocationNumber),sep=",",index=False)
