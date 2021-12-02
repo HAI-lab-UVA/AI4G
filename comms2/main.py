@@ -1,11 +1,11 @@
 import argparse
+from numpy import genfromtxt
 import pandas as pd
 
 from feedback_module import Feedback
 
 
 def main():
-
 
     parser = argparse.ArgumentParser(description='Feedback module')
     parser.add_argument('decision', help='Decision Matrix data in csv form')
@@ -45,7 +45,8 @@ def main():
         alloc_feedback_df = pd.read_csv(args.alloc)
         item_feedback_df = pd.read_csv(args.item)
 
-    usersim_df = pd.read_csv(args.usersim)
+    usersim_df = genfromtxt(args.usersim, delimiter=',')
+    itemsim_df = genfromtxt(args.itemsim, delimiter=',')
 
     f = Feedback()
 
