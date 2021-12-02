@@ -42,6 +42,9 @@ class Feedback:
         return df
 
 
+    def get_item_feedback(self):
+        return self.item_feedback
+
     def populate_missing_users(self, uid_list, similarity_matrix):
         # use similarity matrix to populate users with no ratings
         # we assume that every user in the aggregate matrix has at least one rating
@@ -97,7 +100,7 @@ class Feedback:
 
 
     # function that runs the entire process
-    def predict_feedback(self, decision_df, item_feedback_df, allocation_feedback_df, similarity_data):
+    def predict_feedback(self, decision_df, item_feedback_df, allocation_feedback_df, user_similarity_data, item_similarity_data):
 
         # the easy stuff
         # the step to do right when everything starts
@@ -135,7 +138,7 @@ class Feedback:
         for missing_uid in [uid for uid in decision_users if uid not in existing_users]:
 
             # sort similarity values from greatest-> least and find similar user that exists in matrix
-            for similar_index in numpy.argsort(similarity_data[missing_uid])[::-1]:
+            for similar_index in numpy.argsort(user_similarity_data[missing_uid])[::-1]:
 
                 if (similar_index != missing_uid) & (similar_index in existing_users):
                     similar_ratings = item_allocation_feedback[item_allocation_feedback[uid_field] == similar_index].to_dict("records")
@@ -172,45 +175,63 @@ class Feedback:
         return prediction_df
 
 def main():
+    print ("feedback_module")
 
-    parser = argparse.ArgumentParser(description='Feedback module')
-    parser.add_argument('-d', '--decision', help='Decision Matrix data in csv form')
-    parser.add_argument('-f', '--feedback', help='Feedback survey data in csv form')
-    parser.add_argument('-a', '--alloc', help='Allocation Feedback data in csv form')
-    parser.add_argument('-i', '--item', help='Item Feedback data in csv form')
-    parser.add_argument('-u', '--usersim', help='User similarity data in csv form')
-    parser.add_argument('-s', '--itemsim', help='Item similarity data in csv form')
-    parser.add_argument('-o', '--outfile', default="predicted_feedback",  help='output csv filename')
+    # inputs to feedback process
 
-    args = parser.parse_args()
-    if not args.decision:
-        print ("Decision data was not specified")
-        exit()
-    if (not args.feedback) and not (args.alloc and args.item):
-        print ("Feedback data was not specified")
-        exit()
-    if (not args.usersim):
-        print ("User similarity data was not specified")
-    if (not args.itemsim):
-        print ("Item similarity data was not specified")
+    # action "matrix"
+    actiondf = pd.DataFrame(
+        {'itemID': [0, 2, 0, 2],
+        'userID': [0, 0, 1, 1],
+        'quantity': [3, 3, 3, 3]}
+    )
+    print (actiondf)
 
-    decision_df = pd.read_csv(args.decision)
+    # feedback "matrix"
+    feedbackdf = pd.DataFrame(
+        {'itemID': [0, 2, 0, 2],
+        'userID': [0, 0, 1, 1],
+        'rating': [3, 3, 3, 3]}
+    )
+    print (feedbackdf)
 
-    alloc_feedback_df = None
-    item_feedback_df = None
-    if args.feedback:
-        pass
-    elif args.alloc and args.item:
-        alloc_feedback_df = pd.read_csv(args.alloc)
-        item_feedback_df = pd.read_csv(args.item)
+    # user similarity "matrix"
+    user_similarity = [
+    [1, 0.25, 0.5],
+    [0.25, 1, 1],
+    [0.5, 1, 1],
+    ]
 
-    usersim_df = pd.read_csv(args.usersim)
+    # item similarity "matrix"
+    item_similarity = [
+    [1, 0.25, 0.5],
+    [0.25, 1, 1],
+    [0.5, 1, 1],
+    ]
+
 
     f = Feedback()
 
-    feedback_prediction_df = f.predict_feedback(decision_df, item_feedback_df, alloc_feedback_df, usersim_df)
+    # combine decision and feedback matrices
+    decision = pd.DataFrame(
+        {'userID': [0, 0, 1, 1, 2, 2],
+        'itemID': [0, 1, 0, 1, 0, 1],
+        'quantity': [6, 10, 4, 8, 4, 6]}
+    )
 
-    feedback_prediction_df.to_csv("{}.csv".format(args.outfile), index=False)
+    feedback = pd.DataFrame(
+        {'userID': [0, 1],
+        'itemID': [0, 0],
+        'rating': [3, 2]}
+    )
+
+    print (decision)
+    print (feedback)
+
+    x = f.predict_feedback(actiondf, [], feedbackdf, user_similarity, item_similarity_data)
+
+    print (x)
+
 
 
 if __name__ == "__main__":

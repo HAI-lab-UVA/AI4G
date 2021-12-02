@@ -25,18 +25,42 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-## Running the Feedback Module
+## Generarting Feedback
+
+Generating feedback consists of two steps.
+* First, survey responses must be split and converted into Allocation feedback and Item feedback. This is done through the `handle_user_feedback.py` script
+* Missing feedback is predicted. This is done through the feedback module
+
+### Generating Allocation and Item feedback
+```
+$ python handle_user_feedback.py
+```
+
+
+### Running the Feedback Module
 
 The feedback module can be run either from the command line or imported into a python program as a module
 
-### Command line
+#### Command line
 ```
-$ python main.py
+$ python main.py <DECISION_CSV> <ALLOC_FEEDBACK_CSV> <ITEM_FEEDBACK_CSV> <USER_SIMILARITY_CSV> <ITEM_SIMILARITY_CSV>
 ```
 
-### Module
+#### Module
 ```
 from feedback_module import Feedback
     
 f = Feedback()
+
+# generate predicted feedback df
+feedback_prediction_df = f.predict_feedback(
+    <DECISION_DF>,
+    <ALLOC_FEEDBACK_DF>,
+    <ITEM_FEEDBACK_DF>,
+    <USER_SIMILARITY_DF>,
+    <ITEM_SIMILARITY_DF>
+)
+
+# get raw item feedback data
+f.get_item_feedback()
 ```
