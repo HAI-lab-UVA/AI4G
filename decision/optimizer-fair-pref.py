@@ -6,9 +6,9 @@ Angel, Katherine, Matthew, Shashank, Zach, and Zhiming
 
 #For this package need to install C++14,cvxpy, and cvxopt
 import cvxpy as cp
+import mosek
 import numpy as np
 import pandas as pd
-#from decision.reward import *
 
 num_iter = 10
 
@@ -75,24 +75,13 @@ def compute_grade_threshold(D,Gamma):
 
     return threshold2
 
+
 for i in range(0, y, 19):
     D = allD.iloc[:, i:i + 19].to_numpy()
     userID = userID[:]
     Gamma = allGamma.iloc[:, i:i + 19].to_numpy().sum(axis=0)
 
     past_tau = np.array(previous_allocation_rewards)
-    # #demand
-    # D = np.random.randint(1, 5, size=5).reshape(5, 1)
-    # #number of users and items
-    # U, I = D.shape
-    # #supply
-    # Gamma = np.random.randint(1,7, size=I)
-
-    # #Overleaf sample scenario
-    # # demand
-    # D = np.array([[1, 1, 0, 1, 1],[1,0,0,1,1]]).T
-    #     #.reshape(5, 2)
-    #
     D2 = D.copy()
     D2 = np.where(D2 ==0, 100000,D)
 
@@ -105,27 +94,26 @@ for i in range(0, y, 19):
     # preference matrix randomly generated
     preference = np.random.rand(U, I).T
 
-    if len(previous_allocation_rewards) == 0:
-        # Variables
-        allocation = cp.Variable((U, I), integer=True)
-        delta = allocation / D2 - psi2
-        tau = cp.sum(delta, axis=1)
-        xi = tau
-        alpha = cp.Variable()
-    else:
-        # Variables
-        allocation = cp.Variable((U, I), integer=True)
-        delta = allocation / D2 - psi2
-        tau = cp.sum(delta, axis=1)
-        xi = tau + cp.sum(gamma * past_tau, axis=0)
-        alpha = cp.Variable()
+    # Define the variables for the problem
+    allocation = cp.Variable((U, I), integer=True)
+    delta = cp.Variable((U, I))
+    tau = cp.Variable(U)
+    xi = cp.Variable(U)
+    alpha = cp.Variable()
 
-    # Constraints
     constraints = []
-    constraints.append(cp.sum(allocation, axis=0) <= Gamma)
-    constraints.append(allocation <= D)
-    constraints.append(alpha <= xi)
-    constraints.append(allocation >= 0)
+    constraints += [cp.sum(allocation, axis=0) <= Gamma]
+    constraints += [allocation <= D]
+    constraints += [delta == (allocation / D2) - psi2]
+    constraints += [tau == cp.sum(delta, axis=1)]
+
+    if len(previous_allocation_rewards) == 0:
+        constraints += [xi == tau]
+    else:
+        constraints += [xi == tau + cp.sum(gamma * past_tau, axis=0)]
+    
+    constraints += [alpha <= xi]
+    constraints += [allocation >= 0]
 
     # Objective function
     objective = cp.Maximize(w_fair * alpha + w_preference * 1 / (U * I) * cp.sum(allocation @ preference))
@@ -134,7 +122,9 @@ for i in range(0, y, 19):
     prob = cp.Problem(objective, constraints)
 
     # Solve
-    prob.solve()
+    mosek_params = {mosek.dparam.optimizer_max_time: 10,
+                    mosek.dparam.mio_tol_rel_gap: 0.05}
+    prob.solve(solver=cp.MOSEK, mosek_params=mosek_params, verbose=True)
 
     tauValue = tau.value
 
