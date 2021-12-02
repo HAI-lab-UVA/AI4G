@@ -38,7 +38,7 @@ accuracy.rmse(predictions, verbose=True)
 
 # After Training
 algo.fit(n_epochs = 5)
-RHat2 = algo.construct_RHat(write_out = True, OVERRIDE = OVERRIDE)
+RHat2 = algo.construct_RHat(write_out = False, OVERRIDE = OVERRIDE)
 print(RHat2)
 predictions = algo.test(algo.trainset.build_testset())
 accuracy.rmse(predictions, verbose=True)
@@ -61,5 +61,6 @@ breakpoint()
 """
 # Handling a new item
 
-
+user_sim = algo.sim_mat(is_user = True)
+user_sim = algo.sim_mat(is_user = False)
 breakpoint()

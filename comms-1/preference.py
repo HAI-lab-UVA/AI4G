@@ -100,7 +100,6 @@ class SVDpp_neighborhood(AlgoBase):
 
                 sqrt_R_u = np.sqrt(len(R_u))
 
-                # breakpoint()
                 pre_sum_u[u] = (sum((r - self.trainset.global_mean + bu[u] + bi[j])*xj[j] + yj[j] for j, r in R_u) / sqrt_R_u)
 
                 total_e =  0
@@ -217,13 +216,11 @@ class SVDpp_neighborhood(AlgoBase):
             if self.item_sim is None:
                 path='data/item_list.csv'
                 df=pd.read_csv(path).set_index('Item_name')
+                self.item_maping = df.index
 
-                f_groups=df['Food_group'].unique()
-                temp=np.arange(1,f_groups.shape[0]+1)
-                df['Food_group'] = df['Food_group'].replace(f_groups,temp)
                 df.drop(['Notes/comments'],axis=1,inplace=True)
 
-                item_sim = cosine_similarity(normalize(df.to_numpy()))
+                item_sim = cosine_similarity(df.to_numpy())
                 self.item_sim = item_sim
 
             return self.item_sim
@@ -499,16 +496,6 @@ def dataset(path, OVERRIDE = 0):
     return parsed_responses, user_ids
 
 
-
-
-# def add_new_user(similarity_matrix, user_demographics, RHat, model):
-#     user_sim = add_new_element(similarity_matrix,user_demographics)
-#
-#
-#         breakpoint()
-#     breakpoint()
-
-
 def main():
     #matrix rows are user and columns are items
 
@@ -519,7 +506,6 @@ def main():
 
     pred_pref_matrix = construct_RHat(pref_matrix, weights_matrix)
 
-    # breakpoint()
 
 if __name__ == '__main__':
     main()
