@@ -48,8 +48,9 @@ class SVDpp_neighborhood(AlgoBase):
         self.user_sim = self.item_sim = None
         self.been_fit = False
 
-        parsed_responses = dataset(data_path)
+        parsed_responses, user_mappings = dataset(data_path)
 
+        self.user_mapping = user_mappings
         self.data = parsed_responses
 
         pref_columns = ["user_id", "pref_oranges", "pref_apples", "pref_watermelon", "pref_bananas", "pref_eggplant", "pref_tomatoes", "pref_potatoes",
@@ -491,7 +492,7 @@ def dataset(path, OVERRIDE = 0):
                                          pref_chicken, pref_olive_oil,pref_soybean_paste,pref_beef, pref_milk, pref_yogurt, pref_cheese_balls]
 
 
-    return parsed_responses
+    return parsed_responses, user_ids
 
 
 
