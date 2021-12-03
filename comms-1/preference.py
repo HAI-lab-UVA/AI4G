@@ -219,8 +219,22 @@ class SVDpp_neighborhood(AlgoBase):
                 self.item_maping = df.index
 
                 df.drop(['Notes/comments'],axis=1,inplace=True)
+                df['calories'] = df['calories'].astype('float')
+                for c in df.columns[5:10]:
+                    df[c] = df[c].astype('float')
 
-                item_sim = cosine_similarity(df.to_numpy())
+                for item in df.iterrows():
+                    denom = item[1][4]
+                    for i, value in enumerate(item[1]):
+                        if i not in range(5,10):
+                            df.at[item[0],df.columns[i]] = value/denom
+                        else:
+                            df.at[item[0],df.columns[i]] = 0
+
+                df.drop(['Unit (portion size)'],axis = 1, inplace=True)
+
+
+                item_sim = cosine_similarity(normalize(df, axis=0))
                 self.item_sim = item_sim
 
             return self.item_sim
