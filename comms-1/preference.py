@@ -202,6 +202,13 @@ class SVDpp_neighborhood(AlgoBase):
                 df = self.data
                 user_sim = np.zeros((df.shape[0],df.shape[0]))
 
+                A = df.to_numpy()
+                L2_norm = np.sqrt(np.nansum(A**2, axis=0).astype('float'))
+                L2_normT = np.array([1/val if not val == 0 else 0 for val in L2_norm ])
+                A_L2 = (A.transpose() * L2_normT[:,np.newaxis]).transpose()
+
+                df = pd.DataFrame(A_L2)
+
                 for user1 in df.iterrows():
                     for user2 in df.iterrows():
                         try:
@@ -212,6 +219,7 @@ class SVDpp_neighborhood(AlgoBase):
                 self.user_sim = user_sim
 
             return self.user_sim
+
         else:
             if self.item_sim is None:
                 path='data/item_list.csv'
@@ -300,7 +308,6 @@ def nan_cosine_similarity(X, Y):
     else:
         mat = np.column_stack((X,Y)).transpose().astype(float)
         mat = mat[:, ~np.isnan(mat).any(axis=0)]
-
         return cosine_similarity(mat)[0][1]
 
 

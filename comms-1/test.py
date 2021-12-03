@@ -45,6 +45,11 @@ accuracy.rmse(predictions, verbose=True)
 # breakpoint()
 
 
+user_sim = algo.sim_mat(is_user = True)
+item_sim = algo.sim_mat(is_user = False)
+breakpoint()
+
+
 
 # Testing adding a new user
 """
@@ -60,7 +65,3 @@ print(RHat3)
 breakpoint()
 """
 # Handling a new item
-
-user_sim = algo.sim_mat(is_user = True)
-user_sim = algo.sim_mat(is_user = False)
-breakpoint()
