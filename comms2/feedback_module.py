@@ -58,7 +58,7 @@ class Feedback:
         reader = Reader(rating_scale=(1, 5))
 
         # Train SVD model from aggregate + similar user data
-        data = Dataset.load_from_df(aggregate_df[[uid_field, iid_quantity_field, rating_field]], reader)
+        data = Dataset.load_from_df(aggregate_df.astype({uid_field: str, iid_quantity_field: str})[[uid_field, iid_quantity_field, rating_field]], reader)
         trainset = data.build_full_trainset()
         algo = SVDpp()
         algo.fit(trainset)
@@ -228,7 +228,7 @@ def main():
     print (decision)
     print (feedback)
 
-    x = f.predict_feedback(actiondf, [], feedbackdf, user_similarity, item_similarity_data)
+    x = f.predict_feedback(actiondf, [], feedbackdf, user_similarity, item_similarity)
 
     print (x)
 

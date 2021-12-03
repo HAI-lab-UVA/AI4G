@@ -78,9 +78,7 @@ def main():
     feedback_prediction_df = f.predict_feedback(decision_df, item_feedback_df, alloc_feedback_df, usersim_df, itemsim_df)
 
     feedback_prediction_df['username'] = feedback_prediction_df.apply(lambda x: id_user_mapping[x['userID']], axis=1)
-
     feedback_prediction_df['item'] = feedback_prediction_df.apply(lambda x: id_item_mapping[x['itemID']], axis=1)
-
     feedback_prediction_df[['userID', 'itemID', 'username', 'item', 'rating']].to_csv("{}.csv".format(args.outfile), index=False)
 
 
