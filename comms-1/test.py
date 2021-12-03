@@ -45,8 +45,8 @@ accuracy.rmse(predictions, verbose=True)
 # breakpoint()
 
 
-user_sim = algo.sim_mat(is_user = True)
-item_sim = algo.sim_mat(is_user = False)
+user_sim = algo.sim_mat(as_df = True, is_user = True)
+item_sim = algo.sim_mat(as_df = True, is_user = False)
 breakpoint()
 
 

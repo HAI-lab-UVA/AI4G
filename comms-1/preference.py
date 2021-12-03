@@ -50,7 +50,7 @@ class SVDpp_neighborhood(AlgoBase):
 
         parsed_responses, user_mappings = dataset(data_path)
 
-        self.user_mapping = user_mappings
+        self.user_mapping = user_mappings.rename(columns = {"Please enter an identifier (ex. computing id)" : ""})
         self.data = parsed_responses
 
         pref_columns = ["user_id", "pref_oranges", "pref_apples", "pref_watermelon", "pref_bananas", "pref_eggplant", "pref_tomatoes", "pref_potatoes",
@@ -196,7 +196,7 @@ class SVDpp_neighborhood(AlgoBase):
 
         return est
 
-    def sim_mat(self, is_user = True):
+    def sim_mat(self, as_df = False, write_out = False, is_user = True):
         if is_user:
             if self.user_sim is None:
                 df = self.data
@@ -218,13 +218,24 @@ class SVDpp_neighborhood(AlgoBase):
 
                 self.user_sim = user_sim
 
+            if as_df:
+                df_out = pd.DataFrame(data = self.user_sim, index = self.user_mapping, columns = self.user_mapping)
+                if write_out:
+                    df_out.to_csv("data\\user_sim.csv")
+                return df_out
+
+            else:
+                if write_out:
+                    np.savetxt("data\\user_sim_np.csv", self.user_sim, delimiter=",")
+
             return self.user_sim
 
         else:
             if self.item_sim is None:
                 path='data/item_list.csv'
                 df=pd.read_csv(path).set_index('Item_name')
-                self.item_maping = df.index
+                self.item_mapping = df.index
+                self.item_mapping.name = ''
 
                 df.drop(['Notes/comments'],axis=1,inplace=True)
                 df['calories'] = df['calories'].astype('float')
@@ -244,6 +255,16 @@ class SVDpp_neighborhood(AlgoBase):
 
                 item_sim = cosine_similarity(normalize(df, axis=0))
                 self.item_sim = item_sim
+
+            if as_df:
+                df_out = pd.DataFrame(data = self.item_sim, index = self.item_mapping, columns = self.item_mapping)
+                if write_out:
+                    df_out.to_csv("data\\item_sim.csv")
+                return df_out
+
+            else:
+                if write_out:
+                    np.savetxt("data\\item_sim_np.csv", self.item_sim, delimiter=",")
 
             return self.item_sim
 
@@ -277,6 +298,9 @@ class SVDpp_neighborhood(AlgoBase):
                 df.to_csv("data\\user_preferences.csv")
 
             return df
+        else:
+            if write_out:
+                np.savetxt("data\\user_preferences_np.csv", RHat, delimiter=",")
 
         return RHat
 
