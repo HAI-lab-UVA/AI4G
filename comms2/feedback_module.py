@@ -67,7 +67,7 @@ class Feedback:
 
         ret_df = pd.merge(ret_df, feedback_df, how="left", on=[uid_field, iid_field])
 
-        ret_df[iid_quantity_field] = ret_df[[iid_field, quantity_field]].apply(tuple, axis=1)
+        ret_df[iid_quantity_field] = ret_df[[iid_field, quantity_field]].apply(lambda x: (int(x[iid_field]), x[quantity_field]), axis=1)
 
         ret_df = pd.merge(ret_df, aggregate_df, how="left", on=[uid_field, iid_quantity_field])
         ret_df[rating_field] = ret_df["{}_y".format(rating_field)].fillna(ret_df["{}_x".format(rating_field)])
@@ -135,7 +135,7 @@ class Feedback:
         existing_users = set(item_allocation_feedback[uid_field].tolist())
         decision_users = set(decision_df[uid_field].tolist())
         missing_user_ratings = []
-        for missing_uid in [uid for uid in decision_users if uid not in existing_users]:
+        for missing_uid in (decision_users - existing_users):
 
             # sort similarity values from greatest-> least and find similar user that exists in matrix
             for similar_index in numpy.argsort(user_similarity_data[missing_uid])[::-1]:
@@ -150,6 +150,29 @@ class Feedback:
                     break
 
         missing_df = pd.DataFrame(missing_user_ratings)
+
+        if not missing_df.empty:
+            item_allocation_feedback = pd.concat([item_allocation_feedback, missing_df])
+
+        # find missing item allocation pairs
+        existing_item_allocation = set(item_allocation_feedback[iid_quantity_field].tolist())
+        decision_item_allocation = set([(int(i), float(a)) for (i, a) in decision_df[[iid_field, quantity_field]].to_records(index=False)])
+
+        missing_item_allocation_ratings = []
+        for (missing_iid, missing_allocation) in (decision_item_allocation - existing_item_allocation):
+
+            for similar_index in numpy.argsort(item_similarity_data[missing_iid])[::-1]:
+                if (similar_index != missing_iid) & ((similar_index, missing_allocation) in existing_item_allocation):
+
+                    similar_ratings = item_allocation_feedback[item_allocation_feedback[iid_quantity_field] == (similar_index, missing_allocation)].to_dict("records")
+
+                    for similar_rating in similar_ratings:
+                        similar_rating[iid_quantity_field] = (missing_iid, missing_allocation)
+                    missing_item_allocation_ratings.extend(similar_ratings)
+
+                    break
+
+        missing_df = pd.DataFrame(missing_item_allocation_ratings)
 
         if not missing_df.empty:
             item_allocation_feedback = pd.concat([item_allocation_feedback, missing_df])
