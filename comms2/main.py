@@ -68,9 +68,6 @@ def main():
     if not decision_history_df.empty:
         decision_history_df = decision_history_df.groupby(['userID', 'itemID']).agg({'decision_history':lambda x: list(x)})
 
-    import pdb
-    pdb.set_trace()
-
     alloc_feedback_df = pd.read_csv(args.alloc)
     item_feedback_df = pd.read_csv(args.item)
 
