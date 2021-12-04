@@ -60,7 +60,7 @@ def download():
     for file in results['files']:
         if selected_day in file['name'] and file['mimeType'] == 'application/vnd.google-apps.spreadsheet':
             file_id = file['id']
-            file_name = file['name']
+            file_name = "{}.csv".format(file['name'])
 
     if file_id == None:
         print("No file found.")
