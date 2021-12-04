@@ -13,7 +13,9 @@ def main():
     parser.add_argument('item', help='Item Feedback data in csv form')
     parser.add_argument('usersim', help='User similarity data in csv form')
     parser.add_argument('itemsim', help='Item similarity data in csv form')
-    parser.add_argument('-o', '--outfile', default="predicted_feedback",  help='output csv filename')
+    parser.add_argument('dec_hist', help='Decision history in csv form')
+    parser.add_argument('day', type=int, help='Current iteration day')
+    parser.add_argument('-o', '--outfile', default="predicted_allocation_feedback",  help='output csv filename')
 
     args = parser.parse_args()
 
@@ -41,6 +43,26 @@ def main():
         } for item_id, quantity in row[[str(i) for i in range(18)]].items()])
     
     decision_df = pd.DataFrame(decision_list)
+
+
+    decision_history_df = pd.read_csv(args.dec_hist)
+
+    decision_history_list = []
+    for i, row in decision_history_df[decision_history_df['AllocationTime'].between(args.day - 3, args.day - 1)].iterrows():
+        user_name = row["ID"]
+        day = row["AllocationTime"]
+
+        decision_history_list.extend([{
+            'userID': user_id_mapping[user_name],
+            'itemID': int(item_id),
+            'quantity': quantity,
+            'day': day,
+        } for item_id, quantity in row[[str(i) for i in range(18)]].items()])
+    
+    decision_history_df = pd.DataFrame(decision_history_list)
+
+    if not decision_history_df.empty:
+        decision_history_df = decision_history_df.groupby(['userID', 'itemID']).agg({'quantity':lambda x: list(x)})
 
     alloc_feedback_df = pd.read_csv(args.alloc)
     item_feedback_df = pd.read_csv(args.item)
@@ -79,8 +101,14 @@ def main():
 
     feedback_prediction_df['username'] = feedback_prediction_df.apply(lambda x: id_user_mapping[x['userID']], axis=1)
     feedback_prediction_df['item'] = feedback_prediction_df.apply(lambda x: id_item_mapping[x['itemID']], axis=1)
-    feedback_prediction_df[['userID', 'itemID', 'username', 'item', 'rating']].to_csv("{}.csv".format(args.outfile), index=False)
+    feedback_prediction_df[['userID', 'itemID', 'username', 'item', 'rating']].to_csv("OUTPUT/{}_day_{}.csv".format(args.outfile, args.day), index=False)
 
+
+    item_feedback_df = f.get_item_feedback()
+    item_feedback_df['username'] = item_feedback_df.apply(lambda x: id_user_mapping[x['userID']], axis=1)
+    item_feedback_df['item'] = item_feedback_df.apply(lambda x: id_item_mapping[x['itemID']], axis=1)
+    
+    item_feedback_df[['userID', 'itemID', 'username', 'item', 'rating']].to_csv("OUTPUT/item_feedback_day_{}.csv".format(args.day), index=False)
 
 if __name__ == "__main__":
     main()

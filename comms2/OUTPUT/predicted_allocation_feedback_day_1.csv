@@ -1,0 +1,181 @@
+userID,itemID,username,item,rating
+3,0,Gal Gadot,Apple,3.0
+3,1,Gal Gadot,Eggplant,2.380188234146255
+3,2,Gal Gadot,Rice,2.9342594108356455
+3,3,Gal Gadot,Egg,2.0
+3,4,Gal Gadot,Milk,2.357247625679932
+3,5,Gal Gadot,Orange,3.0
+3,6,Gal Gadot,Tomatoes,2.430189549324396
+3,7,Gal Gadot,Bread,2.373255453497234
+3,8,Gal Gadot,"Beef (raw, ground)",2.9192049924012764
+3,9,Gal Gadot,"Yogurt (Low fat, plain)",2.8257710200580464
+3,10,Gal Gadot,Potato,2.4249540121407214
+3,11,Gal Gadot,Banana,2.552923594222271
+3,12,Gal Gadot,Olive Oil,2.0
+3,13,Gal Gadot,"Chicken (raw, ground)",2.0
+3,14,Gal Gadot,"Fish (raw, carp)",2.0
+3,15,Gal Gadot,Cheese ball,2.0
+3,16,Gal Gadot,oats,3.0
+3,17,Gal Gadot,Soy beans paste,2.3485500372881387
+1,0,Anonymous Narwhal,Apple,2.306841382200505
+1,1,Anonymous Narwhal,Eggplant,2.4695628178698
+1,2,Anonymous Narwhal,Rice,3.0
+1,3,Anonymous Narwhal,Egg,2.0
+1,4,Anonymous Narwhal,Milk,2.269158538122597
+1,5,Anonymous Narwhal,Orange,3.0
+1,6,Anonymous Narwhal,Tomatoes,2.426872668747756
+1,7,Anonymous Narwhal,Bread,3.0
+1,8,Anonymous Narwhal,"Beef (raw, ground)",2.0
+1,9,Anonymous Narwhal,"Yogurt (Low fat, plain)",2.338623496413786
+1,10,Anonymous Narwhal,Potato,2.4448800153672123
+1,11,Anonymous Narwhal,Banana,2.4565321409880196
+1,12,Anonymous Narwhal,Olive Oil,3.0
+1,13,Anonymous Narwhal,"Chicken (raw, ground)",3.0
+1,14,Anonymous Narwhal,"Fish (raw, carp)",2.401722459142955
+1,15,Anonymous Narwhal,Cheese ball,2.0
+1,16,Anonymous Narwhal,oats,3.0
+1,17,Anonymous Narwhal,Soy beans paste,3.0
+5,0,csk6snj,Apple,2.0
+5,1,csk6snj,Eggplant,2.0
+5,2,csk6snj,Rice,3.0
+5,3,csk6snj,Egg,2.0
+5,4,csk6snj,Milk,3.0
+5,5,csk6snj,Orange,2.0
+5,6,csk6snj,Tomatoes,3.0
+5,7,csk6snj,Bread,2.3549599380784065
+5,8,csk6snj,"Beef (raw, ground)",2.0
+5,9,csk6snj,"Yogurt (Low fat, plain)",2.413552526821858
+5,10,csk6snj,Potato,2.4060729077665153
+5,11,csk6snj,Banana,3.0
+5,12,csk6snj,Olive Oil,3.0
+5,13,csk6snj,"Chicken (raw, ground)",2.0
+5,14,csk6snj,"Fish (raw, carp)",2.2430794408098373
+5,15,csk6snj,Cheese ball,2.0
+5,16,csk6snj,oats,2.7655431917538498
+5,17,csk6snj,Soy beans paste,2.2746048774689283
+12,0,blacklodge,Apple,2.0
+12,1,blacklodge,Eggplant,2.4268749671564724
+12,2,blacklodge,Rice,2.0
+12,3,blacklodge,Egg,2.2337811371882466
+12,4,blacklodge,Milk,2.5690326312802894
+12,5,blacklodge,Orange,2.0444781542657955
+12,6,blacklodge,Tomatoes,2.6047314418473255
+12,7,blacklodge,Bread,2.372840207097004
+12,8,blacklodge,"Beef (raw, ground)",2.0
+12,9,blacklodge,"Yogurt (Low fat, plain)",2.0
+12,10,blacklodge,Potato,2.3279423379875905
+12,11,blacklodge,Banana,2.2337811371882466
+12,12,blacklodge,Olive Oil,2.2337811371882466
+12,13,blacklodge,"Chicken (raw, ground)",2.5499597888939425
+12,14,blacklodge,"Fish (raw, carp)",3.0
+12,15,blacklodge,Cheese ball,3.0
+12,16,blacklodge,oats,3.0
+12,17,blacklodge,Soy beans paste,2.0
+11,0,nm2fs,Apple,2.0
+11,1,nm2fs,Eggplant,2.3484093028672297
+11,2,nm2fs,Rice,2.466595673095611
+11,3,nm2fs,Egg,2.0
+11,4,nm2fs,Milk,2.42187729018347
+11,5,nm2fs,Orange,2.4501379183592364
+11,6,nm2fs,Tomatoes,2.414899403558239
+11,7,nm2fs,Bread,3.0
+11,8,nm2fs,"Beef (raw, ground)",2.0
+11,9,nm2fs,"Yogurt (Low fat, plain)",3.0
+11,10,nm2fs,Potato,3.0
+11,11,nm2fs,Banana,2.3144562190384206
+11,12,nm2fs,Olive Oil,2.3938069243397737
+11,13,nm2fs,"Chicken (raw, ground)",2.0
+11,14,nm2fs,"Fish (raw, carp)",2.351355569506899
+11,15,nm2fs,Cheese ball,2.2553147612961455
+11,16,nm2fs,oats,2.4976315519725047
+11,17,nm2fs,Soy beans paste,2.0
+13,0,ae3xd,Apple,2.0
+13,1,ae3xd,Eggplant,2.0
+13,2,ae3xd,Rice,3.0
+13,3,ae3xd,Egg,3.0
+13,4,ae3xd,Milk,3.0
+13,5,ae3xd,Orange,3.0
+13,6,ae3xd,Tomatoes,2.0
+13,7,ae3xd,Bread,2.0
+13,8,ae3xd,"Beef (raw, ground)",3.0
+13,9,ae3xd,"Yogurt (Low fat, plain)",2.0
+13,10,ae3xd,Potato,2.0
+13,11,ae3xd,Banana,2.0
+13,12,ae3xd,Olive Oil,2.0
+13,13,ae3xd,"Chicken (raw, ground)",3.0
+13,14,ae3xd,"Fish (raw, carp)",3.0
+13,15,ae3xd,Cheese ball,3.0
+13,16,ae3xd,oats,2.0
+13,17,ae3xd,Soy beans paste,2.321554063657354
+9,0,znp3ev,Apple,2.2326250140644675
+9,1,znp3ev,Eggplant,2.2326250140644675
+9,2,znp3ev,Rice,3.0
+9,3,znp3ev,Egg,2.2326250140644675
+9,4,znp3ev,Milk,2.0
+9,5,znp3ev,Orange,2.0
+9,6,znp3ev,Tomatoes,2.0
+9,7,znp3ev,Bread,2.0
+9,8,znp3ev,"Beef (raw, ground)",2.0
+9,9,znp3ev,"Yogurt (Low fat, plain)",2.0
+9,10,znp3ev,Potato,2.0
+9,11,znp3ev,Banana,2.2326250140644675
+9,12,znp3ev,Olive Oil,2.2326250140644675
+9,13,znp3ev,"Chicken (raw, ground)",3.0
+9,14,znp3ev,"Fish (raw, carp)",3.0
+9,15,znp3ev,Cheese ball,2.0
+9,16,znp3ev,oats,2.2326250140644675
+9,17,znp3ev,Soy beans paste,2.2326250140644675
+8,0,zqz8ae,Apple,2.237717529423018
+8,1,zqz8ae,Eggplant,2.237717529423018
+8,2,zqz8ae,Rice,2.237717529423018
+8,3,zqz8ae,Egg,2.237717529423018
+8,4,zqz8ae,Milk,2.237717529423018
+8,5,zqz8ae,Orange,2.237717529423018
+8,6,zqz8ae,Tomatoes,2.237717529423018
+8,7,zqz8ae,Bread,2.237717529423018
+8,8,zqz8ae,"Beef (raw, ground)",3.0
+8,9,zqz8ae,"Yogurt (Low fat, plain)",2.0
+8,10,zqz8ae,Potato,2.0
+8,11,zqz8ae,Banana,2.0
+8,12,zqz8ae,Olive Oil,2.237717529423018
+8,13,zqz8ae,"Chicken (raw, ground)",3.0
+8,14,zqz8ae,"Fish (raw, carp)",2.0
+8,15,zqz8ae,Cheese ball,2.0
+8,16,zqz8ae,oats,2.0
+8,17,zqz8ae,Soy beans paste,2.0
+2,0,ak3gj,Apple,2.096151065234385
+2,1,ak3gj,Eggplant,2.0
+2,2,ak3gj,Rice,3.0
+2,3,ak3gj,Egg,3.0
+2,4,ak3gj,Milk,3.0
+2,5,ak3gj,Orange,2.228441098786948
+2,6,ak3gj,Tomatoes,2.0
+2,7,ak3gj,Bread,2.0
+2,8,ak3gj,"Beef (raw, ground)",2.0
+2,9,ak3gj,"Yogurt (Low fat, plain)",2.228441098786948
+2,10,ak3gj,Potato,2.228441098786948
+2,11,ak3gj,Banana,2.0
+2,12,ak3gj,Olive Oil,2.431141870165338
+2,13,ak3gj,"Chicken (raw, ground)",2.049442696574673
+2,14,ak3gj,"Fish (raw, carp)",3.0
+2,15,ak3gj,Cheese ball,2.0
+2,16,ak3gj,oats,2.0
+2,17,ak3gj,Soy beans paste,2.0
+7,0,pex7ps,Apple,2.211138119328496
+7,1,pex7ps,Eggplant,2.3314216018482674
+7,2,pex7ps,Rice,2.4696194584942774
+7,3,pex7ps,Egg,2.0
+7,4,pex7ps,Milk,3.0
+7,5,pex7ps,Orange,3.0
+7,6,pex7ps,Tomatoes,2.324803873069897
+7,7,pex7ps,Bread,2.4696194584942774
+7,8,pex7ps,"Beef (raw, ground)",2.0
+7,9,pex7ps,"Yogurt (Low fat, plain)",2.3426437937305575
+7,10,pex7ps,Potato,2.176269564172906
+7,11,pex7ps,Banana,2.4696194584942774
+7,12,pex7ps,Olive Oil,2.4047379520933863
+7,13,pex7ps,"Chicken (raw, ground)",2.0
+7,14,pex7ps,"Fish (raw, carp)",2.87958259688605
+7,15,pex7ps,Cheese ball,2.0
+7,16,pex7ps,oats,3.0
+7,17,pex7ps,Soy beans paste,2.271002772775095
