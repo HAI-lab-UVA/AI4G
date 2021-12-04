@@ -100,7 +100,7 @@ class Feedback:
 
 
     # function that runs the entire process
-    def predict_feedback(self, decision_df, item_feedback_df, allocation_feedback_df, user_similarity_data, item_similarity_data):
+    def predict_feedback(self, decision_df, item_feedback_df, allocation_feedback_df, user_similarity_data, item_similarity_data, decision_history):
 
         # the easy stuff
         # the step to do right when everything starts
@@ -118,7 +118,7 @@ class Feedback:
             item_id = row[iid_field]
             rating_history = row[rating_history_field]
 
-            decision_history = self.decision_history[(self.decision_history[uid_field] == user_id) & (self.decision_history[iid_field] == item_id)]["decision_history"]
+            decision_history = decision_history[(decision_history[uid_field] == user_id) & (decision_history[iid_field] == item_id)]["decision_history"]
 
             item_allocation_feedback_history_list.extend([{
                 uid_field: user_id,
@@ -186,14 +186,6 @@ class Feedback:
         tmp[rating_history_field] = tmp.apply(lambda row: row[rating_history_field].insert(0,row[rating_field]) if type(row[rating_history_field]) == list else [row[rating_field],], axis=1)
         tmp[rating_history_field] = tmp.apply(lambda row: row[rating_history_field].pop() if len(row[rating_history_field]) > stored_history else True, axis=1)
         self.bp = tmp[self.col_names]
-
-        # add decision to history
-        tmp = self.decision_history
-        tmp = pd.merge(self.decision_history, decision_df, on=[uid_field, iid_field], how="outer")
-
-        tmp["decision_history"] = tmp.apply(lambda row: row["decision_history"].insert(0,row["quantity"]) if type(row["decision_history"]) == list else [row["quantity"],], axis=1)
-        tmp["decision_history"] = tmp.apply(lambda row: row["decision_history"].pop() if len(row["decision_history"]) > stored_history else True, axis=1)
-        self.decision_history = tmp[[uid_field, iid_field, "decision_history"]]
 
         return prediction_df
 

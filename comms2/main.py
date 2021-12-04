@@ -25,9 +25,14 @@ def main():
     user_id_mapping = {item: i for i, item in user_data["Please enter an identifier (ex. computing id)"].items()}
     id_user_mapping = {v: k for k, v in user_id_mapping.items()}
 
-    item_mapping_file = "../comms-1/data/item_list.csv"
+    # item_mapping_file = "../comms-1/data/item_list.csv"
+    # item_data = pd.read_csv(item_mapping_file)
+    # item_id_mapping = {item: i for i, item in item_data["Item_name"].items()}
+    # id_item_mapping = {v: k for k, v in item_id_mapping.items()}
+
+    item_mapping_file = "../comms-1/data/user_preferences.csv"
     item_data = pd.read_csv(item_mapping_file)
-    item_id_mapping = {item: i for i, item in item_data["Item_name"].items()}
+    item_id_mapping = {col: i for i, col in  enumerate(item_data.columns[1:])}
     id_item_mapping = {v: k for k, v in item_id_mapping.items()}
 
     decision_df = pd.read_csv(args.decision)
@@ -38,12 +43,11 @@ def main():
 
         decision_list.extend([{
             'userID': user_id_mapping[user_name],
-            'itemID': int(item_id),
+            'itemID': item_id,
             'quantity': quantity,
-        } for item_id, quantity in row[[str(i) for i in range(18)]].items()])
+        } for item_id, (item, quantity) in enumerate(row[1:len(item_id_mapping) + 1].items())])
     
     decision_df = pd.DataFrame(decision_list)
-
 
     decision_history_df = pd.read_csv(args.dec_hist)
 
@@ -55,18 +59,20 @@ def main():
         decision_history_list.extend([{
             'userID': user_id_mapping[user_name],
             'itemID': int(item_id),
-            'quantity': quantity,
+            'decision_history': quantity,
             'day': day,
-        } for item_id, quantity in row[[str(i) for i in range(18)]].items()])
+        } for item_id, (item, quantity) in enumerate(row[1:len(item_id_mapping) + 1].items())])
     
     decision_history_df = pd.DataFrame(decision_history_list)
 
     if not decision_history_df.empty:
-        decision_history_df = decision_history_df.groupby(['userID', 'itemID']).agg({'quantity':lambda x: list(x)})
+        decision_history_df = decision_history_df.groupby(['userID', 'itemID']).agg({'decision_history':lambda x: list(x)})
+
+    import pdb
+    pdb.set_trace()
 
     alloc_feedback_df = pd.read_csv(args.alloc)
     item_feedback_df = pd.read_csv(args.item)
-
 
     alloc_feedback_list = []
     for i, row in alloc_feedback_df.iterrows():
@@ -97,7 +103,7 @@ def main():
 
     f = Feedback()
 
-    feedback_prediction_df = f.predict_feedback(decision_df, item_feedback_df, alloc_feedback_df, usersim_df, itemsim_df)
+    feedback_prediction_df = f.predict_feedback(decision_df, item_feedback_df, alloc_feedback_df, usersim_df, itemsim_df, decision_history_df)
 
     feedback_prediction_df['username'] = feedback_prediction_df.apply(lambda x: id_user_mapping[x['userID']], axis=1)
     feedback_prediction_df['item'] = feedback_prediction_df.apply(lambda x: id_item_mapping[x['itemID']], axis=1)
