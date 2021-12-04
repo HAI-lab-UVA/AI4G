@@ -7,14 +7,14 @@ Install Surprise
 To do this you can follow the instructions on their page (https://surpriselib.com/ or https://github.com/NicolasHug/Surprise)
 
 If you want a tl;dr:
-* If you have conda use: 
+* If you have conda use:
   * ```
     $ conda install -c conda-forge scikit-surprise
     ```
-* If just pip use: 
+* If just pip use:
   * ```
     $ pip install numpy
-    $ pip install scikit-surprise 
+    $ pip install scikit-surprise
     ```
 * You may need to also install c++ version 14, but if you run into this issue, message either Andrew or Austin on slack.
 
@@ -32,7 +32,7 @@ Running the code
   ```
 You should get something similar to this (don't worry about the decimal places being slightly different): ![image](https://user-images.githubusercontent.com/42854353/144130430-b5aa09ed-d059-49ff-a1fd-0a1eb73bf44d.png)
 
-At this point you will be within the python debugger. 
+At this point you will be within the python debugger.
 Possible commands include:
   * To exit, type "exit" and hit enter.
   * To get user similarities, type `algo.sim_mat(is_user = True)`
@@ -52,11 +52,13 @@ algo.fit(n_epochs = 5)
 From here you can call any of the following SVDpp_neighborhood class methods
 * algo.fit(n_epochs = 20)
 * algo.estimate(u, i)
-* algo.sim_mat(is_user = True)
-* algo.construct_RHat(df = True, OVERRIDE = -10000)
+* algo.sim_mat(is_user = True, as_df = False, write_out = False)
+* algo.construct_RHat(df = True, write_out = False, OVERRIDE = -10000)
 * algo.data.drop(columns = algo.pref.columns)           # for just demographical information
 * algo.pref                                             # for just preferences information
 * algo.data                                             # for combined preference and demographical data
+* algo.user_mapping
+* algo.item_mapping
 
 Others will be added to the list upon completion (notably adding new users and new items) (and new features are semi-available upon request)
 

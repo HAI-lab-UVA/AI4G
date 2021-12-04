@@ -48,8 +48,9 @@ class SVDpp_neighborhood(AlgoBase):
         self.user_sim = self.item_sim = None
         self.been_fit = False
 
-        parsed_responses = dataset(data_path)
+        parsed_responses, user_mappings = dataset(data_path)
 
+        self.user_mapping = user_mappings.rename(columns = {"Please enter an identifier (ex. computing id)" : ""})
         self.data = parsed_responses
 
         pref_columns = ["user_id", "pref_oranges", "pref_apples", "pref_watermelon", "pref_bananas", "pref_eggplant", "pref_tomatoes", "pref_potatoes",
@@ -99,7 +100,6 @@ class SVDpp_neighborhood(AlgoBase):
 
                 sqrt_R_u = np.sqrt(len(R_u))
 
-                # breakpoint()
                 pre_sum_u[u] = (sum((r - self.trainset.global_mean + bu[u] + bi[j])*xj[j] + yj[j] for j, r in R_u) / sqrt_R_u)
 
                 total_e =  0
@@ -196,11 +196,18 @@ class SVDpp_neighborhood(AlgoBase):
 
         return est
 
-    def sim_mat(self, is_user = True):
+    def sim_mat(self, as_df = False, write_out = False, is_user = True):
         if is_user:
             if self.user_sim is None:
                 df = self.data
                 user_sim = np.zeros((df.shape[0],df.shape[0]))
+
+                A = df.to_numpy()
+                L2_norm = np.sqrt(np.nansum(A**2, axis=0).astype('float'))
+                L2_normT = np.array([1/val if not val == 0 else 0 for val in L2_norm ])
+                A_L2 = (A.transpose() * L2_normT[:,np.newaxis]).transpose()
+
+                df = pd.DataFrame(A_L2)
 
                 for user1 in df.iterrows():
                     for user2 in df.iterrows():
@@ -211,23 +218,57 @@ class SVDpp_neighborhood(AlgoBase):
 
                 self.user_sim = user_sim
 
+            if as_df:
+                df_out = pd.DataFrame(data = self.user_sim, index = self.user_mapping, columns = self.user_mapping)
+                if write_out:
+                    df_out.to_csv("data\\user_sim.csv")
+                return df_out
+
+            else:
+                if write_out:
+                    np.savetxt("data\\user_sim_np.csv", self.user_sim, delimiter=",")
+
             return self.user_sim
+
         else:
             if self.item_sim is None:
                 path='data/item_list.csv'
                 df=pd.read_csv(path).set_index('Item_name')
+                self.item_mapping = df.index
+                self.item_mapping.name = ''
 
-                f_groups=df['Food_group'].unique()
-                temp=np.arange(1,f_groups.shape[0]+1)
-                df['Food_group'] = df['Food_group'].replace(f_groups,temp)
                 df.drop(['Notes/comments'],axis=1,inplace=True)
+                df['calories'] = df['calories'].astype('float')
+                for c in df.columns[5:10]:
+                    df[c] = df[c].astype('float')
 
-                item_sim = cosine_similarity(normalize(df.to_numpy()))
+                for item in df.iterrows():
+                    denom = item[1][4]
+                    for i, value in enumerate(item[1]):
+                        if i not in range(5,10):
+                            df.at[item[0],df.columns[i]] = value/denom
+                        else:
+                            df.at[item[0],df.columns[i]] = 0
+
+                df.drop(['Unit (portion size)'],axis = 1, inplace=True)
+
+
+                item_sim = cosine_similarity(normalize(df, axis=0))
                 self.item_sim = item_sim
+
+            if as_df:
+                df_out = pd.DataFrame(data = self.item_sim, index = self.item_mapping, columns = self.item_mapping)
+                if write_out:
+                    df_out.to_csv("data\\item_sim.csv")
+                return df_out
+
+            else:
+                if write_out:
+                    np.savetxt("data\\item_sim_np.csv", self.item_sim, delimiter=",")
 
             return self.item_sim
 
-    def construct_RHat(self, df = True, OVERRIDE = -10000):
+    def construct_RHat(self, df = True, write_out = False, OVERRIDE = -10000):
         # breakpoint()
         pref = self.pref.loc[:, self.pref.columns != 'user_id']
         pref = pref.replace(0,OVERRIDE)
@@ -251,8 +292,15 @@ class SVDpp_neighborhood(AlgoBase):
                     RHat[u][i] = pref[u][i]
 
         if df:
-            return pd.DataFrame(data = RHat, columns = ["oranges", "apples", "watermelon", "bananas", "eggplant", "tomatoes", "potatoes", "bread", "oats",
+            df = pd.DataFrame(data = RHat, columns = ["oranges", "apples", "watermelon", "bananas", "eggplant", "tomatoes", "potatoes", "bread", "oats",
                                                         "rice", "fish", "eggs", "chicken", "olive_oil", "soybean", "beef", "milk", "yogurt", "cheese_ball"])
+            if write_out:
+                df.to_csv("data\\user_preferences.csv")
+
+            return df
+        else:
+            if write_out:
+                np.savetxt("data\\user_preferences_np.csv", RHat, delimiter=",")
 
         return RHat
 
@@ -284,7 +332,6 @@ def nan_cosine_similarity(X, Y):
     else:
         mat = np.column_stack((X,Y)).transpose().astype(float)
         mat = mat[:, ~np.isnan(mat).any(axis=0)]
-
         return cosine_similarity(mat)[0][1]
 
 
@@ -491,17 +538,7 @@ def dataset(path, OVERRIDE = 0):
                                          pref_chicken, pref_olive_oil,pref_soybean_paste,pref_beef, pref_milk, pref_yogurt, pref_cheese_balls]
 
 
-    return parsed_responses
-
-
-
-
-# def add_new_user(similarity_matrix, user_demographics, RHat, model):
-#     user_sim = add_new_element(similarity_matrix,user_demographics)
-#
-#
-#         breakpoint()
-#     breakpoint()
+    return parsed_responses, user_ids
 
 
 def main():
@@ -514,7 +551,6 @@ def main():
 
     pred_pref_matrix = construct_RHat(pref_matrix, weights_matrix)
 
-    # breakpoint()
 
 if __name__ == '__main__':
     main()
