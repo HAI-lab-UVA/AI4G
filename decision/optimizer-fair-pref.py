@@ -13,11 +13,12 @@ import numpy as np
 import pandas as pd
 import os
 #allocation time step, start at 0
-allocationNumber = 6
+allocationNumber = 2
 #weight for fairness
 w_fair = 10
 #weight for preferences
 w_preference = 1
+
 
 #read in allocation history
 if os.path.exists("./Data/allocation_history.csv"):
@@ -32,12 +33,19 @@ else:
     #store allocation reward history
     df_previous_allocation_rewards = pd.DataFrame()
 
+# #Read in data from other groups
+# #Part1 Reading files locally for now
+# allD = pd.read_csv("./PredictedDemandSupply/Predicted Demand.csv")
+# userID = allD.iloc[:,0].to_numpy()
+# allD = allD.iloc[:, 1:allD.shape[1]]
+# #Learning Predicted Supply
+# allGamma = pd.read_csv("./PredictedDemandSupply/Predicted Supply.csv")
+# allGamma = allGamma.iloc[:, 1:]
 
-#Read in data from other groups
+#Part2
+#demand at t = 0
 #Learning Predicted Demand
 allD = pd.read_csv("../learning/results/Predicted Demand.csv")
-
-#demand at t = 1
 allD = allD.iloc[:,:21]
 userID = allD.iloc[:,0].to_numpy()
 allD = allD.iloc[:, 1:allD.shape[1] - 1]
@@ -205,6 +213,9 @@ for i in range(0, y, 19):
         previous_allocation_rewards.pop(0)
         previous_allocation_rewards.append(tauValue)
         df_previous_allocation_rewards = pd.DataFrame(previous_allocation_rewards)
+
+    #Part 1
+    #allocationNumber+=1
 
     df_previous_allocation_rewards = pd.DataFrame(previous_allocation_rewards)
 
