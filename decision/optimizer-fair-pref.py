@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import os
 #allocation time step, start at 0
-allocationNumber = 0
+allocationNumber = 1
 #weight for fairness
 w_fair = 10
 #weight for preferences
@@ -22,36 +22,36 @@ w_preference = 1
 
 #read in allocation history
 if os.path.exists("./Data/allocation_history.csv"):
-    df_allocation_history = pd.read_csv("./Data/allocation_history.csv")
+    df_allocation_history = pd.read_csv("./Data/Part2/allocation_history.csv")
 else:
     df_allocation_history = pd.DataFrame()
 
 #read in reward history
 if os.path.exists("./Data/previous_allocation_rewards.csv"):
-    df_previous_allocation_rewards = pd.read_csv("./Data/previous_allocation_rewards.csv")
+    df_previous_allocation_rewards = pd.read_csv("./Data/Part2/previous_allocation_rewards.csv")
 else:
     #store allocation reward history
     df_previous_allocation_rewards = pd.DataFrame()
 
-# #Read in data from other groups
-# #Part1 Reading files locally for now
-# allD = pd.read_csv("./PredictedDemandSupply/Predicted Demand.csv")
-# userID = allD.iloc[:,0].to_numpy()
-# allD = allD.iloc[:, 1:allD.shape[1]]
-# #Learning Predicted Supply
-# allGamma = pd.read_csv("./PredictedDemandSupply/Predicted Supply.csv")
-# allGamma = allGamma.iloc[:, 1:]
-
-#Part2
-#demand at t = 0
-#Learning Predicted Demand
-allD = pd.read_csv("../learning/results/Predicted Demand.csv")
-allD = allD.iloc[:,:21]
+#Read in data from other groups
+#Part1 Reading files locally for now
+allD = pd.read_csv("./PredictedDemandSupply/Predicted Demand.csv")
 userID = allD.iloc[:,0].to_numpy()
-allD = allD.iloc[:, 1:allD.shape[1] - 1]
+allD = allD.iloc[:, 1:allD.shape[1]]
 #Learning Predicted Supply
-allGamma = pd.read_csv("../learning/results/Predicted Supply.csv")
-allGamma = allGamma.iloc[:, 1:20]
+allGamma = pd.read_csv("./PredictedDemandSupply/Predicted Supply.csv")
+allGamma = allGamma.iloc[:, 1:]
+
+# #Part2
+# #demand at t = 0
+# #Learning Predicted Demand
+# allD = pd.read_csv("../learning/results/Predicted Demand.csv")
+# allD = allD.iloc[:,:21]
+# userID = allD.iloc[:,0].to_numpy()
+# allD = allD.iloc[:, 1:allD.shape[1] - 1]
+# #Learning Predicted Supply
+# allGamma = pd.read_csv("../learning/results/Predicted Supply.csv")
+# allGamma = allGamma.iloc[:, 1:20]
 
 #Communication 1 User Preferences
 user_preferences = pd.read_csv("../comms-1/data/user_preferences.csv")
@@ -229,12 +229,12 @@ for i in range(0, y, 19):
 
     #write to CSV files
     #allocation for time t
-    df_id_allocation.to_csv("./Data/allocation_day{}.csv".format(allocationNumber+1),sep=",",index=False)
+    df_id_allocation.to_csv("./Data/Part2/allocation_day{}.csv".format(allocationNumber+1),sep=",",index=False)
     #allocation history
-    df_allocation_history.to_csv("./Data/allocation_history.csv".format(allocationNumber+1),sep=",",index=False)
+    df_allocation_history.to_csv("./Data/Part2/allocation_history.csv".format(allocationNumber+1),sep=",",index=False)
     #reward history
-    df_previous_allocation_rewards.to_csv("./Data/previous_allocation_rewards.csv".format(allocationNumber+1),sep=",",index=False)
-
+    df_previous_allocation_rewards.to_csv("./Data/Part2/previous_allocation_rewards.csv".format(allocationNumber+1),sep=",",index=False)
+    #exit()
 
 
 
