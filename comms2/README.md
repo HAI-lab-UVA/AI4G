@@ -27,40 +27,57 @@ $ pip install -r requirements.txt
 
 ## Generarting Feedback
 
-Generating feedback consists of two steps.
-* First, survey responses must be split and converted into Allocation feedback and Item feedback. This is done through the `handle_user_feedback.py` script
-* Missing feedback is predicted. This is done through the feedback module
+Generating feedback consists of a few steps.
+1. Survey spreadsheet is generated using demand and allocation data.
+1. Survey is uploaded to google drive for distribution
+1. Completed survey is downloaded
+1. Survey responses are split and converted into Allocation feedback and Item feedback. This is done through the `handle_user_feedback.py` script
+1. Missing feedback is predicted. This is done through the feedback module
+
+### Generating Survey spreadsheet
+Both demand and allocation decision data must be present to generate the spreadsheet.
+
+Demand csv file should be placed under `comms2/Demand` with the filename `Predicted_Demand<DAY_NUM>.csv`
+
+Allocation decision file is found in `decision/Data/Part2` with the filename format `alloation_day<DAY_NUM>.csv`
+
+The script to generate the spreadsheet is run using the following commmand.
+```
+$ python feedback-spreadsheet.py
+Enter the feedback day to generate spreadsheet: <DAY_NUM>
+```
+When prompted, enter the `<DAY_NUM>` corresponding to the filenames
+
+The generated file will be found under `comms2/Feedback_Responses` in the format `feedback_day<DAY_NUM>.csv`
+
+### Uploading/Downloading Survey spreadsheet to google drive
+Generated survey spreadsheets can be automatically uploaded to google drive for distribution to users. This is done using the following script.
+```
+$ python upload_download_responses.py
+Type 'upload' to upload generated feedback file or 'download' to download the file: 
+Enter the feedback day to upload: 
+```
+When prompted, enter `upload` or `download`, and the `<DAY_NUM>`.
+
+When downloading, the feedback files will be overwritten with user response data. These files will be found under the same directory, `comms2/Feedback_Responses` in the same file format, `feedback_day<DAY_NUM>.csv`.
 
 ### Generating Allocation and Item feedback
+The survey spreadsheet can be split into Allocation and Item feedback csv files using the following script.
 ```
 $ python handle_user_feedback.py
+Enter the feedback day: 
 ```
+When prompted, enter the `<DAY_NUM>`.
 
+The files will be saved under `comms2/Separate_Responses` with the file format `allocation_feedback_day<DAY_NUM>.csv` and `pref_feedback_day<DAY_NUM>.csv`.
 
 ### Running the Feedback Module
 
-The feedback module can be run either from the command line or imported into a python program as a module
+The feedback module can be run in the following way
 
-#### Command line
 ```
-$ python main.py <DECISION_CSV> <ALLOC_FEEDBACK_CSV> <ITEM_FEEDBACK_CSV> <USER_SIMILARITY_CSV> <ITEM_SIMILARITY_CSV>
+$ python main.py <DECISION_CSV> <ALLOC_FEEDBACK_CSV> <ITEM_FEEDBACK_CSV> <USER_SIMILARITY_CSV> <ITEM_SIMILARITY_CSV> <DECISION_HISTORY_CSV> <DAY_NUM>
 ```
 
-#### Module
-```
-from feedback_module import Feedback
-    
-f = Feedback()
+Output files will be saved under `comms2/OUTPUT` with the file format `item_feedback_day_<DAY_NUM>.csv` for item feedback and `predicted_allocation_feedback_<DAY_NUM>.csv` for allocation feedback.
 
-# generate predicted feedback df
-feedback_prediction_df = f.predict_feedback(
-    <DECISION_DF>,
-    <ALLOC_FEEDBACK_DF>,
-    <ITEM_FEEDBACK_DF>,
-    <USER_SIMILARITY_DF>,
-    <ITEM_SIMILARITY_DF>
-)
-
-# get raw item feedback data
-f.get_item_feedback()
-```
