@@ -95,8 +95,10 @@ def main():
     
     item_feedback_df = pd.DataFrame(item_feedback_list)
 
-    usersim_df = genfromtxt(args.usersim, delimiter=',')
-    itemsim_df = genfromtxt(args.itemsim, delimiter=',')
+    usersim_df = pd.read_csv(args.usersim)
+    usersim_df = usersim_df.iloc[:, 1:].to_numpy()
+    itemsim_df = pd.read_csv(args.itemsim)
+    itemsim_df = itemsim_df.iloc[:, 1:].to_numpy()
 
     f = Feedback()
 
