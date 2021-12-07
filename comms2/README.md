@@ -25,14 +25,14 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-## Generarting Feedback
+## Generating Feedback
 
 Generating feedback consists of a few steps.
 1. Survey spreadsheet is generated using demand and allocation data.
-1. Survey is uploaded to google drive for distribution
-1. Completed survey is downloaded
-1. Survey responses are split and converted into Allocation feedback and Item feedback. This is done through the `handle_user_feedback.py` script
-1. Missing feedback is predicted. This is done through the feedback module
+1. Survey is uploaded to google drive for distribution.
+1. Completed survey is downloaded.
+1. Survey responses are split and converted into Allocation feedback and Item feedback.
+1. Missing feedback is predicted.
 
 ### Generating Survey spreadsheet
 Both demand and allocation decision data must be present to generate the spreadsheet.
