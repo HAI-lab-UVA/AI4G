@@ -2,7 +2,8 @@ import numpy as np
 import pandas as pd
 import os
 
-ALLOCATION_DECISION_PATH = os.path.join(os.getcwd(), 'Allocation_Decision')
+ALLOCATION_DECISION_PATH = os.path.join(os.getcwd(), '../decision/Data/Part2')
+DEMAND_PATH = os.path.join(os.getcwd(), 'Demand')
 FEEDBACK_RESPONSES_PATH = os.path.join(os.getcwd(), 'Feedback_Responses')
 
 if not os.path.isdir(ALLOCATION_DECISION_PATH):
@@ -28,8 +29,10 @@ def combine_feedback(day):
     daily_allocation.drop("ID", inplace=True, axis=1)
     daily_allocation.columns = [col+day for col in daily_allocation.columns]
 
-    allD = pd.read_csv(os.path.join(os.getcwd(), 'demand_survey.csv'))
-    allD.drop("Timestamp", inplace=True, axis=1)
+    allD = pd.read_csv(os.path.join(DEMAND_PATH, 'Predicted_Demand{}.csv'.format(day)))
+    if 'Timestamp' in allD.columns:
+        allD.drop("Timestamp", inplace=True, axis=1)
+
     allD = allD.iloc[:, 1:allD.shape[1]]
 
     start = (int(day) - 1) * 19

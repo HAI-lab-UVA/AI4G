@@ -1,0 +1,41 @@
+ID,Rating,Oranges3,Apples3,Watermelons3,Bananas3,Eggplants3,Tomatoes3,Potatoes3,Bread3,Oats3,Rice3,Fish3,Eggs3,Chicken3,Olive Oil3,Soy Bean Paste3,Beef3,Milk3,"Yogurt (low fat, plain)3",Cheese Balls3
+Gal Gadot,Requested,3,2,2,4,4,2,1,2,1,2,2,3,1,3,3,2,4,4,4
+Gal Gadot,Allocation,3,2,2,2,0,2,1,2,1,2,2,3,1,0,3,2,0,0,0
+Gal Gadot,Rate Quantity,,,,,,,,,,,,,,,,,,,
+Gal Gadot,Rate Item,,,,,,,,,,,,,,,,,,,
+Anonymous Narwhal,Requested,4,4,4,2,5,4,5,2,4,4,4,4,4,3,3,3,3,2,3
+Anonymous Narwhal,Allocation,0,3,4,2,0,4,1,2,1,1,3,4,2,2,3,3,3,2,3
+Anonymous Narwhal,Rate Quantity,,,,,,,,,,,,,,,,,,,
+Anonymous Narwhal,Rate Item,,,,,,,,,,,,,,,,,,,
+csk6snj,Requested,4,5,2,4,4,2,4,2,4,2,1,4,4,1,4,1,1,4,4
+csk6snj,Allocation,0,0,2,4,0,2,4,2,1,2,1,4,0,1,3,1,1,4,3
+csk6snj,Rate Quantity,1,1,3,,1,3,3,,2,3,3,3,,,,,,,
+csk6snj,Rate Item,4,5,5,,1,2,5,5,,,5,3,,,,,,,
+blacklodge,Requested,3,3,3,3,3,3,3,3,2,3,2,2,2,1,1,2,2,3,2
+blacklodge,Allocation,0,1,0,3,2,3,0,3,2,0,2,2,2,1,1,2,2,1,2
+blacklodge,Rate Quantity,,,,,,,,,,,,,,,,,,,
+blacklodge,Rate Item,,,,,,,,,,,,,,,,,,,
+nm2fs,Requested,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3
+nm2fs,Allocation,3,2,3,3,0,3,3,3,3,1,3,3,2,0,0,1,3,3,2
+nm2fs,Rate Quantity,,,,,,,,,,,,,,,,,,,
+nm2fs,Rate Item,,,,,,,,,,,,,,,,,,,
+ae3xd,Requested,2,3,3,3,3,2,3,3,3,7,3,3,8,1,3,3,3,1,3
+ae3xd,Allocation,2,2,3,3,2,2,2,3,1,0,3,3,0,1,1,0,3,1,3
+ae3xd,Rate Quantity,2,1,3,3,3,2,1,2,1,1,,,1,,,2,,,
+ae3xd,Rate Item,,,,,,,,,,,,,,,,,,,
+znp3ev,Requested,6,8,7,3,6,5,7,8,6,6,8,8,5,7,4,7,8,4,8
+znp3ev,Allocation,6,0,6,3,6,5,7,4,6,6,1,8,5,0,4,4,3,4,0
+znp3ev,Rate Quantity,,,,,,,,,,,,,,,,,,,
+znp3ev,Rate Item,,,,,,,,,,,,,,,,,,,
+zqz8ae,Requested,3,6,4,7,3,2,6,2,3,2,2,2,2,2,6,2,2,3,2
+zqz8ae,Allocation,2,0,1,0,3,2,0,2,3,2,2,2,2,2,0,2,2,2,2
+zqz8ae,Rate Quantity,,,,,,,,,,,,,,,,,,,
+zqz8ae,Rate Item,,,,,,,,,,,,,,,,,,,
+ak3gj,Requested,7,5,1,1,1,6,5,4,1,7,5,6,4,1,1,2,1,5,1
+ak3gj,Allocation,0,0,1,1,1,2,2,4,1,0,5,1,4,1,1,2,1,5,1
+ak3gj,Rate Quantity,,,,,,,,,,,,,,,,,,,
+ak3gj,Rate Item,,,,,,,,,,,,,,,,,,,
+pex7ps,Requested,4,6,6,4,3,3,7,7,4,5,9,2,7,4,7,6,3,4,2
+pex7ps,Allocation,4,6,6,4,3,3,0,0,4,5,1,2,0,4,0,5,3,4,2
+pex7ps,Rate Quantity,3,3,3,,3,3,,1,3,3,,3,1,3,1,3,,,
+pex7ps,Rate Item,4,4,4,4,1,3,4,3,3,5,5,3,5,3,4,5,2,3,2
