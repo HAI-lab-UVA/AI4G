@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import os
 #allocation time step, start at 0
-allocationNumber = 3
+allocationNumber = 4
 #weight for fairness
 w_fair = 10
 #weight for preferences
@@ -141,7 +141,7 @@ def compute_grade_threshold(D,Gamma):
     return threshold2
 
 
-for i in range(57, y, 19):
+for i in range(76, y, 19):
     D = allD.iloc[:, i:i + 19].to_numpy()
     userID = userID[:]
     Gamma = allGamma.iloc[:, i:i + 19].to_numpy().sum(axis=0)
