@@ -1,0 +1,191 @@
+userID,itemID,username,item,rating
+3,0,Gal Gadot,oranges,2.671412372190502
+3,1,Gal Gadot,apples,2.816923251730533
+3,2,Gal Gadot,watermelon,3.0
+3,3,Gal Gadot,bananas,2.5811670821838697
+3,4,Gal Gadot,eggplant,3.0
+3,5,Gal Gadot,tomatoes,2.8337822159481068
+3,6,Gal Gadot,potatoes,2.614244192213092
+3,7,Gal Gadot,bread,3.0
+3,8,Gal Gadot,oats,3.0438309812073485
+3,9,Gal Gadot,rice,2.8199441557960325
+3,10,Gal Gadot,fish,2.6675157728144288
+3,11,Gal Gadot,eggs,2.9009507073853804
+3,12,Gal Gadot,chicken,1.0
+3,13,Gal Gadot,olive_oil,2.556971074952447
+3,14,Gal Gadot,soybean,2.2977766631791634
+3,15,Gal Gadot,beef,2.9788431549169077
+3,16,Gal Gadot,milk,2.8881213087156454
+3,17,Gal Gadot,yogurt,2.6012826647677185
+3,18,Gal Gadot,cheese_ball,2.8831617712551756
+1,0,Anonymous Narwhal,oranges,2.611422152469507
+1,1,Anonymous Narwhal,apples,2.8696077420803743
+1,2,Anonymous Narwhal,watermelon,2.7336847676556015
+1,3,Anonymous Narwhal,bananas,2.6370331942778336
+1,4,Anonymous Narwhal,eggplant,2.598468659298452
+1,5,Anonymous Narwhal,tomatoes,3.0
+1,6,Anonymous Narwhal,potatoes,3.0
+1,7,Anonymous Narwhal,bread,2.621177933602237
+1,8,Anonymous Narwhal,oats,2.4999001599639374
+1,9,Anonymous Narwhal,rice,2.7779675892211455
+1,10,Anonymous Narwhal,fish,2.891532361870811
+1,11,Anonymous Narwhal,eggs,2.667867190406879
+1,12,Anonymous Narwhal,chicken,3.0547579116860946
+1,13,Anonymous Narwhal,olive_oil,3.0
+1,14,Anonymous Narwhal,soybean,2.275093157835292
+1,15,Anonymous Narwhal,beef,1.0
+1,16,Anonymous Narwhal,milk,2.4956336609319436
+1,17,Anonymous Narwhal,yogurt,2.250224187773406
+1,18,Anonymous Narwhal,cheese_ball,3.0
+5,0,csk6snj,oranges,2.0
+5,1,csk6snj,apples,3.0
+5,2,csk6snj,watermelon,2.0
+5,3,csk6snj,bananas,3.0
+5,4,csk6snj,eggplant,2.6073994713191997
+5,5,csk6snj,tomatoes,2.6923581083478396
+5,6,csk6snj,potatoes,2.745393084604135
+5,7,csk6snj,bread,2.165442164666137
+5,8,csk6snj,oats,3.0
+5,9,csk6snj,rice,2.136521684645629
+5,10,csk6snj,fish,2.8126151648114766
+5,11,csk6snj,eggs,3.0
+5,12,csk6snj,chicken,3.0
+5,13,csk6snj,olive_oil,3.0
+5,14,csk6snj,soybean,3.0
+5,15,csk6snj,beef,2.095002790275989
+5,16,csk6snj,milk,2.0
+5,17,csk6snj,yogurt,2.287669319519099
+5,18,csk6snj,cheese_ball,2.562119774140417
+12,0,blacklodge,oranges,2.6368568579465523
+12,1,blacklodge,apples,3.0
+12,2,blacklodge,watermelon,2.7165418614495085
+12,3,blacklodge,bananas,2.6197286778093285
+12,4,blacklodge,eggplant,3.0
+12,5,blacklodge,tomatoes,3.0
+12,6,blacklodge,potatoes,3.0
+12,7,blacklodge,bread,2.3844409626205247
+12,8,blacklodge,oats,2.8306505126020514
+12,9,blacklodge,rice,1.0
+12,10,blacklodge,fish,2.860110302166263
+12,11,blacklodge,eggs,2.717411546212883
+12,12,blacklodge,chicken,1.0
+12,13,blacklodge,olive_oil,2.6198888881364506
+12,14,blacklodge,soybean,2.3925938663265667
+12,15,blacklodge,beef,3.0
+12,16,blacklodge,milk,2.1335059929615188
+12,17,blacklodge,yogurt,2.2946411433538354
+12,18,blacklodge,cheese_ball,3.0
+11,0,nm2fs,oranges,3.0
+11,1,nm2fs,apples,3.0
+11,2,nm2fs,watermelon,1.0
+11,3,nm2fs,bananas,3.0
+11,4,nm2fs,eggplant,3.0
+11,5,nm2fs,tomatoes,3.0
+11,6,nm2fs,potatoes,3.0
+11,7,nm2fs,bread,1.0
+11,8,nm2fs,oats,1.0
+11,9,nm2fs,rice,1.0
+11,10,nm2fs,fish,2.6097185054162555
+11,11,nm2fs,eggs,6.0
+11,12,nm2fs,chicken,1.0
+11,13,nm2fs,olive_oil,2.52605719705335
+11,14,nm2fs,soybean,2.324247493611717
+11,15,nm2fs,beef,1.0
+11,16,nm2fs,milk,1.0
+11,17,nm2fs,yogurt,3.0
+11,18,nm2fs,cheese_ball,6.0
+13,0,ae3xd,oranges,2.0
+13,1,ae3xd,apples,2.0
+13,2,ae3xd,watermelon,3.0
+13,3,ae3xd,bananas,1.0
+13,4,ae3xd,eggplant,2.034101978638725
+13,5,ae3xd,tomatoes,2.1656836952173646
+13,6,ae3xd,potatoes,2.0786406187433903
+13,7,ae3xd,bread,2.0
+13,8,ae3xd,oats,1.0
+13,9,ae3xd,rice,2.076490117397854
+13,10,ae3xd,fish,1.0
+13,11,ae3xd,eggs,2.0
+13,12,ae3xd,chicken,1.6632823122544935
+13,13,ae3xd,olive_oil,3.0
+13,14,ae3xd,soybean,2.02492328578412
+13,15,ae3xd,beef,3.0
+13,16,ae3xd,milk,2.0
+13,17,ae3xd,yogurt,1.615919476224094
+13,18,ae3xd,cheese_ball,2.5757053431922934
+9,0,znp3ev,oranges,3.0
+9,1,znp3ev,apples,2.849496788545692
+9,2,znp3ev,watermelon,3.0
+9,3,znp3ev,bananas,2.6391143012617557
+9,4,znp3ev,eggplant,2.6646550389882866
+9,5,znp3ev,tomatoes,2.7758202893071697
+9,6,znp3ev,potatoes,2.6646550389882866
+9,7,znp3ev,bread,2.6646550389882866
+9,8,znp3ev,oats,2.6646550389882866
+9,9,znp3ev,rice,2.6646550389882866
+9,10,znp3ev,fish,2.739137394784406
+9,11,znp3ev,eggs,2.6646550389882866
+9,12,znp3ev,chicken,2.6646550389882866
+9,13,znp3ev,olive_oil,2.6646550389882866
+9,14,znp3ev,soybean,2.6646550389882866
+9,15,znp3ev,beef,3.0
+9,16,znp3ev,milk,1.0
+9,17,znp3ev,yogurt,2.6646550389882866
+9,18,znp3ev,cheese_ball,3.0
+8,0,zqz8ae,oranges,2.692254276155536
+8,1,zqz8ae,apples,2.83641076122586
+8,2,zqz8ae,watermelon,2.7188991325829925
+8,3,zqz8ae,bananas,2.658240422852144
+8,4,zqz8ae,eggplant,3.0
+8,5,zqz8ae,tomatoes,2.48116174891654
+8,6,zqz8ae,potatoes,3.0
+8,7,zqz8ae,bread,2.679532757718591
+8,8,zqz8ae,oats,2.5811940652396355
+8,9,zqz8ae,rice,3.0
+8,10,zqz8ae,fish,3.0
+8,11,zqz8ae,eggs,2.6528189193629843
+8,12,zqz8ae,chicken,1.0
+8,13,zqz8ae,olive_oil,2.559209784603748
+8,14,zqz8ae,soybean,2.26673699228454
+8,15,zqz8ae,beef,2.4556793542388364
+8,16,zqz8ae,milk,2.4572525658253683
+8,17,zqz8ae,yogurt,2.4800303748649397
+8,18,zqz8ae,cheese_ball,2.9114429556270562
+2,0,ak3gj,oranges,3.0
+2,1,ak3gj,apples,3.0
+2,2,ak3gj,watermelon,2.7518202154979403
+2,3,ak3gj,bananas,3.0
+2,4,ak3gj,eggplant,3.0
+2,5,ak3gj,tomatoes,2.7216768809875984
+2,6,ak3gj,potatoes,2.6157053974000113
+2,7,ak3gj,bread,3.0
+2,8,ak3gj,oats,3.0
+2,9,ak3gj,rice,3.0
+2,10,ak3gj,fish,2.6555051316859304
+2,11,ak3gj,eggs,2.6555051316859304
+2,12,ak3gj,chicken,2.470070707501762
+2,13,ak3gj,olive_oil,3.0
+2,14,ak3gj,soybean,3.0
+2,15,ak3gj,beef,2.968529009128113
+2,16,ak3gj,milk,2.8965709344821486
+2,17,ak3gj,yogurt,2.2775387593715575
+2,18,ak3gj,cheese_ball,2.3869471727779583
+7,0,pex7ps,oranges,2.0
+7,1,pex7ps,apples,3.0
+7,2,pex7ps,watermelon,2.0
+7,3,pex7ps,bananas,3.0
+7,4,pex7ps,eggplant,2.598735142105275
+7,5,pex7ps,tomatoes,2.5745904801902206
+7,6,pex7ps,potatoes,2.595297650395475
+7,7,pex7ps,bread,3.0
+7,8,pex7ps,oats,3.0
+7,9,pex7ps,rice,2.200513064439614
+7,10,pex7ps,fish,2.6064098823566453
+7,11,pex7ps,eggs,2.661785546967275
+7,12,pex7ps,chicken,2.2406821524338465
+7,13,pex7ps,olive_oil,2.595297650395475
+7,14,pex7ps,soybean,2.4278260848692876
+7,15,pex7ps,beef,2.140163600611421
+7,16,pex7ps,milk,3.0
+7,17,pex7ps,yogurt,3.0
+7,18,pex7ps,cheese_ball,2.0
