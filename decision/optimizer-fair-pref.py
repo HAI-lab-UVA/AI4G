@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import os
 #allocation time step, start at 0
-allocationNumber = 4
+allocationNumber = 5
 #weight for fairness
 w_fair = 10
 #weight for preferences
@@ -35,11 +35,11 @@ else:
 
 #Read in data from other groups
 #Part1 Reading files locally for now
-allD = pd.read_csv("./PredictedDemandSupply/Predicted Demand.csv")
+allD = pd.read_csv("./PredictedDemandSupply/Predicted Demand_t5.csv")
 userID = allD.iloc[:,0].to_numpy()
 allD = allD.iloc[:, 1:allD.shape[1]]
 #Learning Predicted Supply
-allGamma = pd.read_csv("./PredictedDemandSupply/Predicted Supply.csv")
+allGamma = pd.read_csv("./PredictedDemandSupply/Predicted Supply_t5.csv")
 allGamma = allGamma.iloc[:, 1:]
 
 # #Part2
@@ -141,7 +141,7 @@ def compute_grade_threshold(D,Gamma):
     return threshold2
 
 
-for i in range(76, y, 19):
+for i in range(95, y, 19):
     D = allD.iloc[:, i:i + 19].to_numpy()
     userID = userID[:]
     Gamma = allGamma.iloc[:, i:i + 19].to_numpy().sum(axis=0)
