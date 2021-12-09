@@ -235,27 +235,3 @@ for i in range(95, y, 19):
     #reward history
     df_previous_allocation_rewards.to_csv("./Data/Part2/previous_allocation_rewards.csv".format(allocationNumber+1),sep=",",index=False)
     exit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
