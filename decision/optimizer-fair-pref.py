@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import os
 #allocation time step, start at 0
-allocationNumber = 5
+allocationNumber = 6
 #weight for fairness
 w_fair = 10
 #weight for preferences
@@ -21,13 +21,13 @@ w_preference = 1
 
 
 #read in allocation history
-if os.path.exists("./Data/allocation_history.csv"):
+if os.path.exists("./Data/Part2/allocation_history.csv"):
     df_allocation_history = pd.read_csv("./Data/Part2/allocation_history.csv")
 else:
     df_allocation_history = pd.DataFrame()
 
 #read in reward history
-if os.path.exists("./Data/previous_allocation_rewards.csv"):
+if os.path.exists("./Data/Part2//previous_allocation_rewards.csv"):
     df_previous_allocation_rewards = pd.read_csv("./Data/Part2/previous_allocation_rewards.csv")
 else:
     #store allocation reward history
@@ -35,11 +35,11 @@ else:
 
 #Read in data from other groups
 #Part1 Reading files locally for now
-allD = pd.read_csv("./PredictedDemandSupply/Predicted Demand_t5.csv")
+allD = pd.read_csv("./PredictedDemandSupply/Predicted Demand_t6.csv")
 userID = allD.iloc[:,0].to_numpy()
 allD = allD.iloc[:, 1:allD.shape[1]]
 #Learning Predicted Supply
-allGamma = pd.read_csv("./PredictedDemandSupply/Predicted Supply_t5.csv")
+allGamma = pd.read_csv("./PredictedDemandSupply/Predicted Supply_t6.csv")
 allGamma = allGamma.iloc[:, 1:]
 
 # #Part2
@@ -141,7 +141,7 @@ def compute_grade_threshold(D,Gamma):
     return threshold2
 
 
-for i in range(95, y, 19):
+for i in range(114, y, 19):
     D = allD.iloc[:, i:i + 19].to_numpy()
     userID = userID[:]
     Gamma = allGamma.iloc[:, i:i + 19].to_numpy().sum(axis=0)
