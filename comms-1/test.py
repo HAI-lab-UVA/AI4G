@@ -18,8 +18,20 @@ OVERRIDE = -10000
 
 path = "data\\user_responses.csv"
 
-algo = SVDpp_neighborhood(data_path = path, verbose = False)
+print("random")
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('random',.9), verbose = False)
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('random',.7), verbose = False)
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('random',.7), verbose = False)
+print("rows")
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('rows',2), verbose = False)
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('rows',4), verbose = False)
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('rows',4), verbose = False)
+print('cols')
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('cols',2), verbose = False)
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('cols',4), verbose = False)
+algo = SVDpp_neighborhood(data_path = path, random_state = 42, train_split = ('cols',4), verbose = False)
 
+breakpoint()
 
 # Inital ratings matrix R
 RHat0 = algo.construct_RHat()

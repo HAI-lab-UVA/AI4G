@@ -17,7 +17,7 @@ from sklearn.preprocessing import normalize
 
 class SVDpp_neighborhood(AlgoBase):
 
-    def __init__(self, data_path, n_factors=20, n_epochs=20, init_mean=0, init_std_dev=.1,
+    def __init__(self, data_path, train_split = ("random", .9), n_factors=20, n_epochs=20, init_mean=0, init_std_dev=.1,
                  lr_all=.007, reg_all=.02, lr_bu=None, lr_bi=None, lr_pu=None,
                  lr_qi=None, lr_xj=None, lr_yj=None, lr_zv=None, reg_bu=None, reg_bi=None, reg_pu=None,
                  reg_qi=None, reg_xj=None, reg_yj=None, reg_zv=None, random_state=None, verbose=False):
@@ -59,11 +59,39 @@ class SVDpp_neighborhood(AlgoBase):
 
         self.pref = self.data[pref_columns]
 
-        ratings = pd.melt(self.pref, id_vars = pref_columns[0], value_vars = pref_columns[1:], var_name = 'food_item', value_name = 'rating_given').dropna()
+
+        # Creating our own train/test split, since the surprise one is bad.
+
+        if train_split[0] == "random":
+            ratings = pd.melt(self.pref, id_vars = pref_columns[0], value_vars = pref_columns[1:], var_name = 'food_item',
+                              value_name = 'rating_given').dropna().sample(frac = 1, random_state = self.random_state)
+
+            split_point = int(len(ratings)*train_split[1])
+            ratings_train = ratings[["user_id","food_item","rating_given"]][:split_point]
+            ratings_test = ratings[["user_id","food_item","rating_given"]][split_point:]
+
+        elif train_split[0] == 'rows':
+            ratings = self.pref.sample(frac = 1, random_state = self.random_state)
+
+            ratings_train = pd.melt(ratings[:-train_split[1]], id_vars = pref_columns[0], value_vars = pref_columns[1:],
+                                    var_name = 'food_item', value_name = 'rating_given').dropna()
+            ratings_test = pd.melt(ratings[-train_split[1]:], id_vars = pref_columns[0], value_vars = pref_columns[1:],
+                                   var_name = 'food_item', value_name = 'rating_given').dropna()
+
+        else:
+            ratings = self.pref[self.pref.columns[1:]].sample(frac = 1, axis = 'columns', random_state = self.random_state)
+            ratings.insert(loc = train_split[1], column = "user_id", value = self.pref[self.pref.columns[0]]) # I know this is really janky, but it works... don't @ me lol
+
+            ratings_train = pd.melt(ratings[ratings.columns[train_split[1]+1:]], id_vars = pref_columns[0], value_vars = ratings.columns[train_split[1]+2:],var_name = 'food_item', value_name = 'rating_given').dropna()
+            ratings_test = pd.melt(ratings[ratings.columns[:train_split[1]+1]], id_vars = pref_columns[0], value_vars = ratings.columns[:train_split[1]:], var_name = 'food_item', value_name = 'rating_given').dropna()
+
+
 
         reader = Reader(rating_scale=(0, 5))
-        ds = Dataset.load_from_df(ratings[["user_id","food_item","rating_given"]], reader)
+        ds = Dataset.load_from_df(ratings_train[["user_id","food_item","rating_given"]], reader)
         self.trainset = ds.build_full_trainset()
+        test_set = Dataset.load_from_df(ratings_test[["user_id","food_item","rating_given"]], reader)
+        self.testset = test_set.build_full_trainset()
 
         AlgoBase.__init__(self)
 
@@ -89,7 +117,6 @@ class SVDpp_neighborhood(AlgoBase):
         pu = self.pu if not self.pu is None else rng.normal(self.init_mean, self.init_std_dev, (trainset.n_users, self.n_factors))
         zv = self.zv if not self.zv is None else rng.normal(self.init_mean, self.init_std_dev, (trainset.n_users, self.n_factors))
         pre_sum_i = self.pre_sum_i if not self.pre_sum_i is None else np.zeros((trainset.n_items, self.n_factors))
-
 
 
 
