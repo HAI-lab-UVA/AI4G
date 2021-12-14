@@ -140,7 +140,7 @@ def make_allocation(S, D, P, ψ, w=(10, 1), γ=None, τ_prev=None, optimality_ga
     S = S.sum(axis=0)
 
     constraints = []
-    constraints += [A >= 0] # Can't have negative allocations
+    constraints += [A >= 0]
     constraints += [cp.sum(A, axis=0) <= S] # Can't exceed available supply
     constraints += [A <= D] # Don't give more than they requested
 
@@ -271,4 +271,6 @@ if __name__ == '__main__':
         os.mkdir('results')
     
     allocation_hist.to_csv('results/allocation_history.csv')
+    supply.to_csv('results/supply.csv')
+    demand.to_csv('results/demand.csv')
     obj_vals.to_csv('results/obj_vals.csv')
