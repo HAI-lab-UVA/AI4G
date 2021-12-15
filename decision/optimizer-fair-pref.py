@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import os
 #allocation time step, start at 0
-allocationNumber = 8
+allocationNumber = 0
 #weight for fairness
 w_fair = 10
 #weight for preferences
@@ -34,7 +34,6 @@ else:
     df_previous_allocation_rewards = pd.DataFrame()
 
 #Read in data from other groups
-#Part1 Reading files locally for now
 allD = pd.read_csv("./PredictedDemandSupply/Predicted Demand_t8.csv")
 userID = allD.iloc[:,0].to_numpy()
 allD = allD.iloc[:, 1:allD.shape[1]]
@@ -42,7 +41,7 @@ allD = allD.iloc[:, 1:allD.shape[1]]
 allGamma = pd.read_csv("./PredictedDemandSupply/Predicted Supply_t8.csv")
 allGamma = allGamma.iloc[:, 1:]
 
-# #Part2
+
 # #demand at t = 0
 # #Learning Predicted Demand
 # allD = pd.read_csv("../learning/results/Predicted Demand.csv")
@@ -141,7 +140,7 @@ def compute_grade_threshold(D,Gamma):
     return threshold2
 
 
-for i in range(152, y, 19):
+for i in range(0, y, 19):
     D = allD.iloc[:, i:i + 19].to_numpy()
     userID = userID[:]
     Gamma = allGamma.iloc[:, i:i + 19].to_numpy().sum(axis=0)
@@ -214,9 +213,6 @@ for i in range(152, y, 19):
         previous_allocation_rewards.append(tauValue)
         df_previous_allocation_rewards = pd.DataFrame(previous_allocation_rewards)
 
-    #Part 1
-    #allocationNumber+=1
-
     df_previous_allocation_rewards = pd.DataFrame(previous_allocation_rewards)
 
     #add ID columns and allocation time to allocation df df_id_allocation
@@ -229,12 +225,13 @@ for i in range(152, y, 19):
 
     #write to CSV files
     #allocation for time t
-    df_id_allocation.to_csv("./Data/Part2/allocation_day{}.csv".format(allocationNumber+1),sep=",",index=False)
+    df_id_allocation.to_csv("./Data/Part2/allocation_day{}_noFeedback.csv".format(allocationNumber+1),sep=",",index=False)
     #allocation history
     df_allocation_history.to_csv("./Data/Part2/allocation_history.csv".format(allocationNumber+1),sep=",",index=False)
     #reward history
     df_previous_allocation_rewards.to_csv("./Data/Part2/previous_allocation_rewards.csv".format(allocationNumber+1),sep=",",index=False)
-    exit()
+
+    allocationNumber+=1
 
 
 
