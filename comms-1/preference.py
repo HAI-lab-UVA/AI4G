@@ -15,13 +15,15 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity, paired_euclidean_distances
 from sklearn.preprocessing import normalize
 
+
 class SVDpp_neighborhood(AlgoBase):
 
-    def __init__(self, data_path, train_split = ("random", .9), n_factors=20, n_epochs=20, init_mean=0, init_std_dev=.1,
+    def __init__(self, data_path, train_split = ("random", .9), min_ratings = 1, n_factors=20, n_epochs=20, init_mean=0, init_std_dev=.1,
                  lr_all=.007, reg_all=.02, lr_bu=None, lr_bi=None, lr_pu=None,
                  lr_qi=None, lr_xj=None, lr_yj=None, lr_zv=None, reg_bu=None, reg_bi=None, reg_pu=None,
                  reg_qi=None, reg_xj=None, reg_yj=None, reg_zv=None, random_state=None, verbose=False):
 
+        self.min_ratings = min_ratings
         self.n_factors = n_factors
         self.n_epochs = n_epochs
         self.init_mean = init_mean
@@ -53,8 +55,8 @@ class SVDpp_neighborhood(AlgoBase):
         self.user_mapping = user_mappings.rename(columns = {"Please enter an identifier (ex. computing id)" : ""})
         self.data = parsed_responses
 
-        pref_columns = ["user_id", "pref_oranges", "pref_apples", "pref_watermelon", "pref_bananas", "pref_eggplant", "pref_tomatoes", "pref_potatoes",
-                        "pref_bread", "pref_oats", "pref_rice", "pref_fish", "pref_eggs", "pref_chicken", "pref_olive_oil", "pref_soybean", "pref_beef",
+        pref_columns = ["user_id", "pref_orange", "pref_apple", "pref_watermelon", "pref_banana", "pref_eggplant", "pref_tomatoes", "pref_potatoes",
+                        "pref_bread", "pref_oats", "pref_rice", "pref_fish", "pref_egg", "pref_chicken", "pref_olive_oil", "pref_soybean_paste", "pref_beef",
                         "pref_milk", "pref_yogurt", "pref_cheese_ball"]
 
         self.pref = self.data[pref_columns]
@@ -82,7 +84,7 @@ class SVDpp_neighborhood(AlgoBase):
             ratings = self.pref[self.pref.columns[1:]].sample(frac = 1, axis = 'columns', random_state = self.random_state)
             ratings.insert(loc = train_split[1], column = "user_id", value = self.pref[self.pref.columns[0]]) # I know this is really janky, but it works... don't @ me lol
 
-            ratings_train = pd.melt(ratings[ratings.columns[train_split[1]+1:]], id_vars = pref_columns[0], value_vars = ratings.columns[train_split[1]+2:],var_name = 'food_item', value_name = 'rating_given').dropna()
+            ratings_train = pd.melt(ratings[ratings.columns[train_split[1]:]], id_vars = pref_columns[0], value_vars = ratings.columns[train_split[1]+1:],var_name = 'food_item', value_name = 'rating_given').dropna()
             ratings_test = pd.melt(ratings[ratings.columns[:train_split[1]+1]], id_vars = pref_columns[0], value_vars = ratings.columns[:train_split[1]:], var_name = 'food_item', value_name = 'rating_given').dropna()
 
 
@@ -91,14 +93,17 @@ class SVDpp_neighborhood(AlgoBase):
         ds = Dataset.load_from_df(ratings_train[["user_id","food_item","rating_given"]], reader)
         self.trainset = ds.build_full_trainset()
         test_set = Dataset.load_from_df(ratings_test[["user_id","food_item","rating_given"]], reader)
-        self.testset = test_set.build_full_trainset()
+        self.testset = test_set.build_full_trainset().build_testset()
 
         AlgoBase.__init__(self)
 
-    def fit(self, n_epochs = 20):
+    def fit(self, n_epochs = None):
+        n_epochs = self.n_epochs if n_epochs == None else n_epochs
         self.been_fit = True
         AlgoBase.fit(self, self.trainset)
         self.sgd(self.trainset, n_epochs)
+        self.sim_mat(is_user = True)
+        self.sim_mat(is_user = False)
 
         return self
 
@@ -178,10 +183,11 @@ class SVDpp_neighborhood(AlgoBase):
         self.pre_sum_u = pre_sum_u
         self.pre_sum_i = pre_sum_i
 
-    def estimate(self, u, i, item_sim = []):
+    def estimate(self, u, i):
         est = self.trainset.global_mean
 
-        if self.trainset.knows_user(u):
+        # breakpoint()
+        if len(self.trainset.ur[u]) > self.min_ratings:
             est += self.bu[u]
         else:
             userTemp = 0
@@ -189,29 +195,39 @@ class SVDpp_neighborhood(AlgoBase):
             for user in self.trainset.ur:
                 itemTemp = 0
                 for item, rating in self.trainset.ur[user]:
-                    itemTemp += (rating - self.bu[user] - self.bi[item] - self.trainset.global_mean) * self.user_sim[user][u]
+                    # breakpoint()
+                    sim = self.user_sim[user][int(u[-1])] if type(u) == str else self.user_sim[user][u]
+                    itemTemp += (rating - self.bu[user] - self.bi[item] - self.trainset.global_mean) * sim
 
-                itemTemp /= np.sqrt(len(self.trainset.ur[user]))
+                itemTemp /= np.sqrt(len(self.trainset.ur[user])) if len((self.trainset.ur[user])) > 0 else 1
+                # print(u,i,user,itemTemp)
                 userTemp += itemTemp
 
-            userTemp /= len(self.trainset.ur)
+            try:
+                userTemp /= len(self.trainset.ur)
+            except:
+                breakpoint()
             est += userTemp
 
-        if self.trainset.knows_item(i):
+        if len(self.trainset.ir[i]) > self.min_ratings:
             est += self.bi[i]
         else:
             itemTemp = 0
             for item in self.trainset.ir:
                 userTemp = 0
-                for user in item:
-                    userTemp += (user - self.bu[user] - self.bi[item] - self.trainset.global_mean) * item_sim[item][i]
-                userTemp /= np.sqrt(len(self.trainset.ir[item]))
+
+                for user, rating in self.trainset.ir[item]:
+                    sim = self.item_sim[item][self.mapping_item[i[10:]]] if type(i) == str else self.item_sim[item][i]
+                    # userTemp += (rating - self.bu[user] - self.bi[item] - self.trainset.global_mean) * self.item_sim[item][pd.Index(self.item_mapping).get_loc(i[10:])]
+                    userTemp += (rating - self.bu[user] - self.bi[item] - self.trainset.global_mean) * sim
+
+                userTemp /= np.sqrt(len(self.trainset.ir[item])) if len((self.trainset.ir[item])) > 0 else 1
                 itemTemp += userTemp
             itemTemp /= len(self.trainset.ir)
             est += itemTemp
 
 
-        if self.trainset.knows_user(u) and self.trainset.knows_item(i):
+        if len(self.trainset.ur[u]) > self.min_ratings and len(self.trainset.ir[i]) > self.min_ratings:
             sqrt_R_u = np.sqrt(len(self.trainset.ur[u]))  # nb of items rated by u
             try:
                 item_based = np.dot(self.qi[i], self.pre_sum_u[u])
@@ -261,7 +277,8 @@ class SVDpp_neighborhood(AlgoBase):
             if self.item_sim is None:
                 path='data/item_list.csv'
                 df=pd.read_csv(path).set_index('Item_name')
-                self.item_mapping = df.index
+                self.item_mapping = pd.Series(df.index)
+                self.mapping_item = {index:val for val,index in enumerate(self.item_mapping.to_numpy())} #to make estimate faster
                 self.item_mapping.name = ''
 
                 df.drop(['Notes/comments'],axis=1,inplace=True)
@@ -371,9 +388,9 @@ def dataset(path, OVERRIDE = 0):
                "transgender", "other_gender", "income", "education", "house_size", "height", "weight", "allergy_none", "allergy_soybeans",
                "allergy_peanuts", "allergy_dairy", "allergy_wheat", "allergy_eggs", "allergy_fish", "allergy_shellfish", "allergy_treenuts",
                "allergy_meat", "allergy_other", "diet_none", "diet_veggie", "diet_vegan", "diet_kosher", "diet_beef", "diet_halal", "diet_red_meat",
-               "diet_diabetic", "diet_gluten", "diet_other", "pref_oranges", "pref_apples", "pref_watermelon", "pref_bananas", "pref_eggplant",
-               "pref_tomatoes", "pref_potatoes", "pref_bread", "pref_oats", "pref_rice", "pref_fish", "pref_eggs", "pref_chicken", "pref_olive_oil",
-               "pref_soybean", "pref_beef", "pref_milk", "pref_yogurt", "pref_cheese_ball"]
+               "diet_diabetic", "diet_gluten", "diet_other", "pref_orange", "pref_apple", "pref_watermelon", "pref_banana", "pref_eggplant",
+               "pref_tomatoes", "pref_potatoes", "pref_bread", "pref_oats", "pref_rice", "pref_fish", "pref_egg", "pref_chicken", "pref_olive_oil",
+               "pref_soybean_paste", "pref_beef", "pref_milk", "pref_yogurt", "pref_cheese_ball"]
 
     parsed_responses = pd.DataFrame(index= np.arange(0,len(user_responses)), columns = columns)
 
@@ -486,10 +503,10 @@ def dataset(path, OVERRIDE = 0):
             diet_other = 1 if len(restrictions) - combined > 0 else 0
 
         # User preferences
-        pref_oranges = user[1][10]
-        pref_apples= user[1][11]
+        pref_orange = user[1][10]
+        pref_apple = user[1][11]
         pref_watermelon = user[1][12]
-        pref_bananas = user[1][13]
+        pref_banana = user[1][13]
         pref_eggplant = user[1][14]
         pref_tomatoes = user[1][15]
         pref_potatoes = user[1][16]
@@ -497,25 +514,25 @@ def dataset(path, OVERRIDE = 0):
         pref_oats = user[1][18]
         pref_rice = user[1][19]
         pref_fish = user[1][20]
-        pref_eggs = user[1][21]
+        pref_egg = user[1][21]
         pref_chicken = user[1][22]
         pref_olive_oil = user[1][23]
         pref_soybean_paste = user[1][24]
         pref_beef = user[1][25]
         pref_milk = user[1][26]
-        pref_yogurt= user[1][27]
-        pref_cheese_balls = user[1][28]
+        pref_yogurt = user[1][27]
+        pref_cheese_ball = user[1][28]
 
 
         # Adjusting Preferences according to dietary restrictions
         if(vegan):
-            pref_eggs = OVERRIDE
+            pref_egg = OVERRIDE
             pref_milk = OVERRIDE
             pref_beef  = OVERRIDE
             pref_yogurt  = OVERRIDE
             pref_chicken = OVERRIDE
             pref_fish  = OVERRIDE
-            pref_cheese_balls = OVERRIDE
+            pref_cheese_ball = OVERRIDE
         if(veggie):
             pref_beef  = OVERRIDE
             pref_chicken = OVERRIDE
@@ -536,12 +553,12 @@ def dataset(path, OVERRIDE = 0):
 
         # Adjusting preferences according to alergic restrictions
         if(eggs):
-            pref_eggs = OVERRIDE
+            pref_egg = OVERRIDE
         if(fish):
             pref_fish = OVERRIDE
         if(dairy):
             pref_milk = OVERRIDE
-            pref_cheese_balls = OVERRIDE
+            pref_cheese_ball = OVERRIDE
             pref_yogurt = OVERRIDE
         if(wheat):
             pref_bread = OVERRIDE
@@ -560,9 +577,9 @@ def dataset(path, OVERRIDE = 0):
         parsed_responses.loc[user[0]] = [user[0], age_range, white, african_american, asian, indian, hawaiian, race_other, female, male, transgender,
                                          gender_other, income_range, education, household, height, weight, no_allergies, soybeans, peanuts, dairy,
                                          wheat, eggs, fish, shellfish, treenuts, redmeat, allergy_other, no_restrictions, veggie, vegan, kosher, beef,
-                                         halal, red_meat, diabetic, gluten_free, diet_other, pref_oranges, pref_apples, pref_watermelon, pref_bananas,
-                                         pref_eggplant, pref_tomatoes, pref_potatoes, pref_bread, pref_oats, pref_rice, pref_fish, pref_eggs,
-                                         pref_chicken, pref_olive_oil,pref_soybean_paste,pref_beef, pref_milk, pref_yogurt, pref_cheese_balls]
+                                         halal, red_meat, diabetic, gluten_free, diet_other, pref_orange, pref_apple, pref_watermelon, pref_banana,
+                                         pref_eggplant, pref_tomatoes, pref_potatoes, pref_bread, pref_oats, pref_rice, pref_fish, pref_egg,
+                                         pref_chicken, pref_olive_oil, pref_soybean_paste, pref_beef, pref_milk, pref_yogurt, pref_cheese_ball]
 
 
     return parsed_responses, user_ids
